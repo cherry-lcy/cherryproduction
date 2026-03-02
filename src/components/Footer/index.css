@@ -1,0 +1,30 @@
+.footer {
+    background-image: url("../../assets/cherry-laptop.jpg");
+    position: relative;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.filter{
+    background: linear-gradient(rgba(0,0,0,0.5) 15%, rgba(0,0,0,0.2));
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.footer h4,
+.footer .row,
+.footer span {
+    position: relative;
+    z-index: 1;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);  /* 添加文字阴影增加可读性 */
+}
+
+.footer span {
+    opacity: 0.9;
+    font-size: 14px;
+}

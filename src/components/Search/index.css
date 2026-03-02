@@ -1,0 +1,29 @@
+.search-input-group {
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.search-input-group.focused {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0.25rem 0.1rem rgba(13, 110, 253, 0.25) !important;
+}
+  
+.search-input:focus,
+.search-button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+}
+  
+.search-button:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+  
+
+.search-button i {
+    transition: transform 0.2s ease;
+}
+  
+.search-button:hover i {
+    transform: scale(1.1);
+}

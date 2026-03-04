@@ -1,3 +1,5 @@
+import {useNavigate} from "react-router-dom";
+
 import NavBar from "../../components/NavBar";
 import CherryBg from "../../assets/cherry-pattern-wallpaper.webp";
 import WordCloudComponent from "../../components/WordCloud";
@@ -24,8 +26,10 @@ const words = [
 ];
 
 const Home = () => {
+    const navigate = useNavigate();
+
     return (<>
-        <NavBar/>
+        <NavBar mode="light"/>
         <section>
             <img 
             class="w-100 section-image"
@@ -58,14 +62,14 @@ const Home = () => {
                         <li>Crafting playable arrangements</li>
                         <li>With rich and intricate textures</li>
                     </ul>
-                    <button type="button" class="btn btn-light">Learn more</button>
+                    <button type="button" class="btn btn-light" onClick={()=>navigate("/search")}>Learn more</button>
                 </section>
             </div>
         </section>
         <section class="w-100 p-4 px-5 pb-5">
             <h2 class="mb-4">Latest Arrangements/Transcriptions</h2>
             <div class="row position-relative">
-                <div class="card col-4">
+                <div class="card col-4 song-card pointer">
                     <div class="card-body pt-4 pb-4">
                         <h4 class="card-title">Icarus</h4>
                         <h6 class="card-subtitle mb-4 text-muted">ARTMS</h6>

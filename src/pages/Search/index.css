@@ -1,0 +1,12 @@
+.view-tag{
+    transition: all ease 0.5s;
+}
+
+.view-tag:hover{
+    font-weight: 600;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.view-tag:active{
+    font-weight: bolder;
+}

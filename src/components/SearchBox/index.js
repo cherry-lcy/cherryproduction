@@ -4,7 +4,7 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './index.css';
 
-const SearchBar = ({ onSearch, placeholder = "Search" }) => {
+const SearchBar = ({ mode = "light", onSearch, placeholder = "Search", width = "200px" }) => {
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
@@ -18,7 +18,8 @@ const SearchBar = ({ onSearch, placeholder = "Search" }) => {
   return (
     <Form onSubmit={handleSubmit} className="search-bar-container">
       <InputGroup 
-        className={`rounded-pill overflow-hidden border border-dark search-input-group ${isFocused ? 'focused' : ''}`}
+        className={`rounded-pill overflow-hidden border border-dark search-input-group ${isFocused ? 'focused' : ''} ${mode}`}
+        style={{ width: width }}  
       >
         <Form.Control
           type="text"
@@ -27,11 +28,13 @@ const SearchBar = ({ onSearch, placeholder = "Search" }) => {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
-          className="border-0 shadow-none search-input"
+          className={`border-0 shadow-none search-input ${mode}`}
           style={{ 
+            backgroundColor: 'transparent',
             outline: 'none', 
             boxShadow: 'none',
-            borderRight: 'none'
+            borderRight: 'none',
+            color: mode === "dark" ? "#ffffff" : "#000000"
           }}
         />
         
@@ -42,10 +45,15 @@ const SearchBar = ({ onSearch, placeholder = "Search" }) => {
           style={{ 
             outline: 'none', 
             boxShadow: 'none',
-            borderLeft: 'none'
+            borderLeft: 'none',
           }}
         >
-          <i className="bi bi-search"></i>
+          <i 
+            className="bi bi-search"
+            style={{
+              color: mode === "dark" ? "#ffffff" : "#000000"
+            }}
+          ></i>
         </Button>
       </InputGroup>
     </Form>

@@ -21,7 +21,7 @@ const WordCloudComponent = ({ words, width = 600, height = 400 }) => {
         },
         rotateRatio: 0.5,
         minSize: 12,
-        shape: 'diamond',   // 形状：'circle', 'cardioid', 'diamond', 'square'
+        shape: 'diamond',
         weightMode: 'size',
         shrinkToFit: true,
         backgroundColor: "#FFF8E1",

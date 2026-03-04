@@ -2,6 +2,13 @@
     box-shadow: 0px -2px 4px rgba(0,0,0,0.5);
     top: 0;
     position: sticky;
+}
+
+.navbar.light{
     background-color: #ffffff;
 }
 
+.navbar.dark{
+    color: #ffffff;
+    background: linear-gradient(rgba(0,0,0,0.6) 80%, rgba(0,0,0,0.4)) !important;
+}

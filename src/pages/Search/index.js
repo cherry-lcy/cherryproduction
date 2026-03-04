@@ -21,7 +21,7 @@ const Search = () => {
             <div style={{width: "70%"}}><SearchBar mode="light" width="100%"/></div>
             <div className="d-flex align-items-center" style={{width: "30%", gap: "10px"}}>
                 <label htmlFor="order" style={{whiteSpace: "nowrap"}}>Order: </label>
-                <select className="form-select" name="order">
+                <select className="form-select rounded-pill" name="order">
                     <option value="1">Time: From old to new</option>
                     <option value="2">Time: From new to old</option>
                     <option value="3">Alphabatical Order</option>
@@ -34,13 +34,13 @@ const Search = () => {
         <div className="row pt-3 pb-4">
             <div className="col-4 px-3 d-flex align-items-center" style={{gap: "10px"}}>
                 <label htmlFor="type" style={{whiteSpace: "nowrap"}}>Type: </label>
-                <select className="form-select" name="singer-name" id="type">
+                <select className="form-select rounded-pill" name="singer-name" id="type">
                     <option value="1">Time: From old to new</option>
                 </select>
             </div>
             <div className="col-5 px-3 d-flex align-items-center" style={{gap: "10px"}}>
                 <label htmlFor="singer-name" style={{whiteSpace: "nowrap"}}>Singer Name: </label>
-                <select className="form-select" name="singer-name" id="singer-name">
+                <select className="form-select rounded-pill" name="singer-name" id="singer-name">
                     <option value="1">Time: From old to new</option>
                 </select>
             </div>

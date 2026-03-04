@@ -1,13 +1,41 @@
+import { Link } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
+import Piece from "../../assets/Icarus.pdf";
+import Song from "../../assets/Icarus.mp3";
+import "./index.css";
 
 const Detail = () => {
     return (<>
-    <NavBar mode="light"/>
-    <section>
-        <h1>Song Detail</h1>
-    </section>
-    <Footer/>
+        <NavBar mode="light"/>
+        <section className="p-4 px-5 pb-5">
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                    <li className="breadcrumb-item"><Link to="/search">Singer</Link></li>
+                    <li className="breadcrumb-item active">Icarus</li>
+                </ol>
+            </nav>
+            <h1 className="mb-3">Icarus</h1>
+            <h5 className="text-muted mb-3">ARTMS</h5>
+            <div className="d-flex justify-content-start align-items-center mb-3" style={{gap: "1.5rem", fontSize: "18px"}}>
+                <span class="badge bg-info text-dark">Arrangement</span>
+                <span class="badge bg-primary text-light">ARTMS</span>
+            </div>
+            <p className="desc mb-4">Last updated: 5/3/2025</p>
+            <audio src={Song} controls className="mb-3"></audio>
+            <div className="mb-3" style={{ width: '80%', height: '1000px', border: '1px solid #ddd', borderRadius: '8px' }}>
+                <iframe
+                    src={Piece}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 'none', borderRadius: '8px' }}
+                    title="PDF Viewer"
+                />
+            </div>
+            <p>If you prefer other format, please contact CherryProduction at Bilibili or Email.</p>
+        </section>
+        <Footer/>
     </>)
 }
 

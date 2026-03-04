@@ -27,6 +27,11 @@ code {
   font-style: normal;
 }
 
+.form-select{
+  border-color: #000000;
+  border-radius: 
+}
+
 .section-image{
   background-repeat: no-repeat;
   object-fit: cover;

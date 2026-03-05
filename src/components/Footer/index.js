@@ -17,7 +17,7 @@ const Footer = () => {
                     <div class="nav" onClick={()=>navigate("/search")}>Piano Arrangements</div>
                 </div>
                 <div class="col-4">
-                    <div class="nav" onClick={()=>navigate("/search")}>Feedback</div>
+                    <div class="nav" onClick={()=>window.open("https://space.bilibili.com/3546599764527382", "_blank")}>Bilibili</div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 import Piece from "../../assets/Icarus.pdf";
@@ -6,6 +6,8 @@ import Song from "../../assets/Icarus.mp3";
 import "./index.css";
 
 const Detail = () => {
+    const navigate = useNavigate();
+
     return (<>
         <NavBar mode="light"/>
         <section className="p-4 px-5 pb-5">
@@ -23,7 +25,26 @@ const Detail = () => {
                 <span class="badge bg-primary text-light">ARTMS</span>
             </div>
             <p className="desc mb-4">Last updated: 5/3/2025</p>
-            <audio src={Song} controls className="mb-3"></audio>
+            <audio className="mb-3" src={Song} controls></audio>
+            <h5 className="mb-2">Video</h5>
+            <div className="d-flex align-items-center mb-3">
+                <label className="mx-2">Link:</label>
+                <button 
+                    className="bilibili-icon" 
+                    onClick={()=>window.open("https://www.bilibili.com/video/BV1hfA2zgEgt", "_blank")}>
+                </button>
+            </div>
+            <div className="mb-4" style={{ width: '80%', height: '700px', border: '1px solid #ddd', borderRadius: '8px' }}>
+                <iframe
+                    
+                    src="https://www.bilibili.com/video/BV1hfA2zgEgt"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 'none', borderRadius: '8px' }}
+                    title="Video Viewer"
+                />
+            </div>
+            <h5 className="mb-3">Video</h5>
             <div className="mb-3" style={{ width: '80%', height: '1000px', border: '1px solid #ddd', borderRadius: '8px' }}>
                 <iframe
                     src={Piece}

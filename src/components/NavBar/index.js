@@ -16,8 +16,13 @@ const NavBar = ({mode}) => {
                     <div class="col-4">
                         <div class="nav" onClick={()=>navigate("/search")}>Piano Arrangements</div>
                     </div>
-                    <div class="col-4">
-                        <div class="nav" onClick={()=>navigate("/feedback")}>Feedback</div>
+                    <div class="col-2">
+                        <div class="nav" onClick={()=>window.open("https://space.bilibili.com/3546599764527382", "_blank")}>Bilibili</div>
+                    </div>
+                    <div class="col-2">
+                        <div class="nav mx-2">简</div>
+                        /
+                        <div class="nav mx-2">繁</div>
                     </div>
                     <div class="col-4 px-4">
                         <SearchBar mode={mode}/>

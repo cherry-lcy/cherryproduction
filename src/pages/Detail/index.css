@@ -1,3 +1,14 @@
 .desc{
     font-size: 14px;
 }
+
+.bilibili-icon{
+    background-image: url("../../assets/bilibili\ icon.png");
+    width: 32px;
+    height: 32px;
+    border-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding: 0px !important;
+    background-color: transparent;
+}

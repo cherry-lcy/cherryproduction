@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 import Piece from "../../assets/Icarus.pdf";
@@ -6,8 +6,6 @@ import Song from "../../assets/Icarus.mp3";
 import "./index.css";
 
 const Detail = () => {
-    const navigate = useNavigate();
-
     return (<>
         <NavBar mode="light"/>
         <section className="p-4 px-5 pb-5">

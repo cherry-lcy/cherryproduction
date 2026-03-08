@@ -27,9 +27,8 @@ code {
   font-style: normal;
 }
 
-.form-select{
+.form-select, .form-control{
   border-color: #000000;
-  border-radius: 
 }
 
 .section-image{

@@ -26,21 +26,21 @@ const Search = () => {
                     <option value="2">Time: From new to old</option>
                     <option value="3">Alphabatical Order</option>
                     <option value="4">Reverse Alphabatical Order</option>
-                    <option value="5">Singer Order</option>
-                    <option value="6">Singer Reverse Order</option>
+                    <option value="5">artist Order</option>
+                    <option value="6">artist Reverse Order</option>
                 </select>
             </div>
         </div>
         <div className="row pt-3 pb-4">
             <div className="col-4 px-3 d-flex align-items-center" style={{gap: "10px"}}>
                 <label htmlFor="type" style={{whiteSpace: "nowrap"}}>Type: </label>
-                <select className="form-select rounded-pill" name="singer-name" id="type">
+                <select className="form-select rounded-pill" name="type" id="type">
                     <option value="1">Time: From old to new</option>
                 </select>
             </div>
             <div className="col-5 px-3 d-flex align-items-center" style={{gap: "10px"}}>
-                <label htmlFor="singer-name" style={{whiteSpace: "nowrap"}}>Singer Name: </label>
-                <select className="form-select rounded-pill" name="singer-name" id="singer-name">
+                <label htmlFor="artist-name" style={{whiteSpace: "nowrap"}}>Artist Name: </label>
+                <select className="form-select rounded-pill" name="artist-name" id="artist-name">
                     <option value="1">Time: From old to new</option>
                 </select>
             </div>

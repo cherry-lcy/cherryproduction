@@ -23,13 +23,9 @@ const AdminLogin = () => {
             });
 
             let token = "";
-            try {
-                const data = await response.json();
-                token = data?.token || "";
-            } catch (e) {
-                token = "";
-            }
+            token = response?.token || "";
 
+            console.log("token", token)
             if (token) {
                 sessionStorage.setItem("token", token);
             }

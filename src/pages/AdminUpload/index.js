@@ -1,7 +1,8 @@
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
+import api from "../../utils/api";
 
 const AdminUpload = () => {
     const [title, setTitle] = useState("");
@@ -18,7 +19,8 @@ const AdminUpload = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("adminToken");
+        const token = sessionStorage.getItem("token");
+        console.log(token)
         if (!token) {
             navigate("/admin/login");
         }
@@ -29,7 +31,7 @@ const AdminUpload = () => {
         setMessage("");
         setError("");
 
-        const token = localStorage.getItem("adminToken");
+        const token = sessionStorage.getItem("token");
         if (!token) {
             navigate("/admin/login");
             return;
@@ -55,167 +57,192 @@ const AdminUpload = () => {
         setLoading(true);
 
         try {
-            const response = await fetch("/api/songs", {
-                method: "POST",
-                headers: {
-                    // Assuming admin_required reads bearer token from Authorization header
-                    Authorization: `Bearer ${token}`
-                },
-                body: formData
-            });
-
-            if (!response.ok) {
-                let errorMessage = "Upload failed.";
-                try {
-                    const data = await response.json();
-                    if (data && data.error) {
-                        errorMessage = data.error;
-                    }
-                } catch (e) {
-                    // ignore JSON parse errors
-                }
-                setError(errorMessage);
-                return;
+            const response = await api.upload("/api/songs", formData);
+            
+            if (response && response.error) {
+                setError(response.error);
+            } else if (response && response.song) {
+                setMessage("Song uploaded successfully.");
+                setTitle("");
+                setArtist("");
+                setType("");
+                setReleaseDate("");
+                setVideoUrl("");
+                setAudioFile(null);
+                setPdfFile(null);
+                setCoverFile(null);
+                
+                document.getElementById('audio-file').value = '';
+                document.getElementById('piece-file').value = '';
+                document.getElementById('cover-file').value = '';
+            } else {
+                setMessage("Song uploaded successfully.");
             }
-
-            // On success, you can inspect returned song if needed
-            // const data = await response.json();
-
-            setMessage("Song uploaded successfully.");
-            setTitle("");
-            setArtist("");
-            setType("");
-            setReleaseDate("");
-            setVideoUrl("");
-            setAudioFile(null);
-            setPdfFile(null);
-            setCoverFile(null);
-        } catch (e) {
-            setError("An unexpected error occurred during upload.");
+        } catch (error) {
+            console.error('Upload error:', error);
+            setError(error.message || "An unexpected error occurred during upload.");
         } finally {
             setLoading(false);
         }
     };
 
-    return (<>
-        <NavBar mode="light" />
-        <section className="p-4 px-5 pb-5">
-            <h1 className="mb-4">Admin Upload</h1>
-            <form onSubmit={handleSubmit} style={{maxWidth: "600px"}}>
-                <div className="mb-3">
-                    <label htmlFor="piece-title" className="form-label">Title</label>
-                    <input
-                        id="piece-title"
-                        type="text"
-                        className="form-control"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="piece-artist" className="form-label">Artist</label>
-                    <input
-                        id="piece-artist"
-                        type="text"
-                        className="form-control"
-                        value={artist}
-                        onChange={(e) => setArtist(e.target.value)}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="piece-type" className="form-label">Type</label>
-                    <select
-                        className="form-select"
-                        name="type"
-                        id="piece-type"
-                        value={type}
-                        onChange={(e) => setType(e.target.value)}
+    const handleFileChange = (setter) => (e) => {
+        const file = e.target.files?.[0] ?? null;
+        setter(file);
+    };
+
+    return (
+        <>
+            <NavBar mode="light" />
+            <section className="p-4 px-5 pb-5">
+                <h1 className="mb-4">Admin Upload</h1>
+                <form onSubmit={handleSubmit} style={{maxWidth: "600px"}}>
+                    <div className="mb-3">
+                        <label htmlFor="piece-title" className="form-label">
+                            Title <span className="text-danger">*</span>
+                        </label>
+                        <input
+                            id="piece-title"
+                            type="text"
+                            className="form-control"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                        />
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="piece-artist" className="form-label">
+                            Artist <span className="text-danger">*</span>
+                        </label>
+                        <input
+                            id="piece-artist"
+                            type="text"
+                            className="form-control"
+                            value={artist}
+                            onChange={(e) => setArtist(e.target.value)}
+                            required
+                        />
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="piece-type" className="form-label">Type</label>
+                        <select
+                            className="form-select"
+                            name="type"
+                            id="piece-type"
+                            value={type}
+                            onChange={(e) => setType(e.target.value)}
+                        >
+                            <option value="">Select type</option>
+                            <option value="Arrangement">Arrangement</option>
+                            <option value="Transcription">Transcription</option>
+                        </select>
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="piece-release-date" className="form-label">Release Date</label>
+                        <input
+                            id="piece-release-date"
+                            type="date"
+                            className="form-control"
+                            value={releaseDate}
+                            onChange={(e) => setReleaseDate(e.target.value)}
+                        />
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="piece-video" className="form-label">Video URL</label>
+                        <input
+                            id="piece-video"
+                            type="url"
+                            className="form-control"
+                            value={videoUrl}
+                            onChange={(e) => setVideoUrl(e.target.value)}
+                            placeholder="https://bilibili.com/..."
+                        />
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="audio-file" className="form-label">
+                            Audio File
+                        </label>
+                        <input
+                            id="audio-file"
+                            type="file"
+                            className="form-control"
+                            accept="audio/*"
+                            onChange={handleFileChange(setAudioFile)}
+                            required
+                        />
+                        {audioFile && (
+                            <div className="form-text">
+                                Selected: {audioFile.name} ({(audioFile.size / 1024 / 1024).toFixed(2)} MB)
+                            </div>
+                        )}
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="piece-file" className="form-label">Score File (PDF)</label>
+                        <input
+                            id="piece-file"
+                            type="file"
+                            className="form-control"
+                            accept=".pdf"
+                            onChange={handleFileChange(setPdfFile)}
+                        />
+                        {pdfFile && (
+                            <div className="form-text">
+                                Selected: {pdfFile.name} ({(pdfFile.size / 1024 / 1024).toFixed(2)} MB)
+                            </div>
+                        )}
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="cover-file" className="form-label">Cover File</label>
+                        <input
+                            id="cover-file"
+                            type="file"
+                            className="form-control"
+                            accept="image/*"
+                            onChange={handleFileChange(setCoverFile)}
+                        />
+                        {coverFile && (
+                            <div className="form-text">
+                                Selected: {coverFile.name} ({(coverFile.size / 1024 / 1024).toFixed(2)} MB)
+                            </div>
+                        )}
+                    </div>
+
+                    {error && (
+                        <div className="alert alert-danger" role="alert">
+                            {error}
+                        </div>
+                    )}
+                    
+                    {message && (
+                        <div className="alert alert-success" role="alert">
+                            {message}
+                        </div>
+                    )}
+                    
+                    <button 
+                        type="submit" 
+                        className="btn btn-dark" 
+                        disabled={loading}
                     >
-                        <option value="">Select type</option>
-                        <option value="Arrangement">Arrangement</option>
-                        <option value="Transcription">Transcription</option>
-                    </select>
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="piece-release-date" className="form-label">Release Date</label>
-                    <input
-                        id="piece-release-date"
-                        type="date"
-                        className="form-control"
-                        value={releaseDate}
-                        onChange={(e) => setReleaseDate(e.target.value)}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="piece-video" className="form-label">Video URL</label>
-                    <input
-                        id="piece-video"
-                        type="url"
-                        className="form-control"
-                        value={videoUrl}
-                        onChange={(e) => setVideoUrl(e.target.value)}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="audio-file" className="form-label">Audio File</label>
-                    <input
-                        id="audio-file"
-                        type="file"
-                        className="form-control"
-                        onChange={(e) => setAudioFile(e.target.files?.[0] ?? null)}
-                    />
-                    {audioFile && (
-                        <div className="form-text">
-                            Selected file: {audioFile.name}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="piece-file" className="form-label">Score File (PDF)</label>
-                    <input
-                        id="piece-file"
-                        type="file"
-                        className="form-control"
-                        onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
-                    />
-                    {pdfFile && (
-                        <div className="form-text">
-                            Selected file: {pdfFile.name}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="cover-file" className="form-label">Cover File</label>
-                    <input
-                        id="cover-file"
-                        type="file"
-                        className="form-control"
-                        onChange={(e) => setCoverFile(e.target.files?.[0] ?? null)}
-                    />
-                    {coverFile && (
-                        <div className="form-text">
-                            Selected file: {coverFile.name}
-                        </div>
-                    )}
-                </div>
-                {error && (
-                    <div className="mb-3 text-danger">
-                        {error}
-                    </div>
-                )}
-                {message && (
-                    <div className="mb-3 text-success">
-                        {message}
-                    </div>
-                )}
-                <button type="submit" className="btn btn-dark" disabled={loading}>
-                    {loading ? "Uploading..." : "Save"}
-                </button>
-            </form>
-        </section>
-        <Footer />
-    </>);
+                        {loading ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Uploading...
+                            </>
+                        ) : "Save"}
+                    </button>
+                </form>
+            </section>
+            <Footer />
+        </>
+    );
 };
 
 export default AdminUpload;
-

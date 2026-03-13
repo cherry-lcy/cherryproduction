@@ -93,10 +93,21 @@ class ApiClient {
         return this.request(endpoint, fetchOptions);
     }
 
-    delete(endpoint) {
-        return this.request(endpoint, { method: "DELETE" });
-    }
+    delete(endpoint, body = null) {
+        const options = {
+            method: "DELETE"
+        };
 
+        if (body) {
+            options.headers = {
+                "Content-Type": "application/json"
+            };
+            options.body = JSON.stringify(body);
+        }
+
+        return this.request(endpoint, options);
+    }
+    
     upload(endpoint, formData, options = {}) {
         return this.post(endpoint, formData, {
             ...options,

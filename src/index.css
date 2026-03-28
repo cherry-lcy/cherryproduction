@@ -81,6 +81,9 @@ button{
 
 .song-card{
   transition: all ease 0.5s;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-width: 250px;
 }
 
 .song-card:hover{

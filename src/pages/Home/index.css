@@ -27,3 +27,79 @@ div .tag:first-child{
     box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     font-weight: 600;
 }
+
+.skeleton-card {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border: none;
+    pointer-events: none;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-title {
+    height: 24px;
+    width: 80%;
+    background: #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-subtitle {
+    height: 16px;
+    width: 60%;
+    background: #e0e0e0;
+    border-radius: 4px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.skeleton-tag {
+    height: 24px;
+    width: 60px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.card {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.card:not(.skeleton-card) {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

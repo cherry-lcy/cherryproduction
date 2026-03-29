@@ -76,7 +76,7 @@ const Detail = () => {
     return (<>
         <SideBar link={info.video_url ? info.video_url : ''}/>
         <NavBar mode="light"/>
-        <section className="p-4 px-5 pb-5">
+        <section className="p-4 px-5 pb-5 detail-page">
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
@@ -89,14 +89,14 @@ const Detail = () => {
             <div className="d-flex justify-content-start align-items-center mb-3" style={{gap: "1.5rem", fontSize: "18px"}}>
                 {!loading && tags.map((tag, id)=>{
                     return id % 2 === 0 ? 
-                    <span class="badge bg-info text-dark">{tag.tag}</span>:
-                    <span class="badge bg-primary text-light">{tag.tag}</span>
+                    <span className="badge bg-info text-dark">{tag.tag}</span>:
+                    <span className="badge bg-primary text-light">{tag.tag}</span>
                 })}
             </div>
             <p className="desc mb-4">Last updated: {info.release_date ? info.release_date : "/"}</p>
             <audio className="mb-3" src={info.audio_url ? info.audio_url : ""} controls></audio>
             <h5 className="mb-2">Video</h5>
-            <div className="mb-4" style={{ width: '80%', height: '700px', border: '1px solid #ddd', borderRadius: '8px' }}>
+            <div className="mb-4 detail-media detail-video" style={{ height: '700px', border: '1px solid #ddd', borderRadius: '8px' }}>
                 <iframe
                     src={info.video_url ? info.video_url : ""}
                     width="100%"
@@ -106,7 +106,7 @@ const Detail = () => {
                 />
             </div>
             <h5 className="mb-3">Score</h5>
-            <div className="mb-3" style={{ width: '80%', height: '1000px', border: '1px solid #ddd', borderRadius: '8px' }}>
+            <div className="mb-3 detail-media detail-pdf" style={{ height: '1000px', border: '1px solid #ddd', borderRadius: '8px' }}>
                 <iframe
                     src={info.pdf_url ? info.pdf_url : ''}
                     width="100%"

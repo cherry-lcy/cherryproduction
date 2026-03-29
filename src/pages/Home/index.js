@@ -78,11 +78,11 @@ const Home = () => {
                     Email: @qq.com
                 </p>
             </section>
-            <section className="w-100 row p-4 px-5"> 
-                <div className="col-6"> 
+            <section className="w-100 row p-4 px-5 home-intro-row"> 
+                <div className="col-12 col-md-6"> 
                     <WordCloudComponent words={words}/>
                 </div>
-                <div className="col-6"> 
+                <div className="col-12 col-md-6"> 
                     <section className="px-5"> 
                         <h1 className="mb-4">Piano Arrangements</h1>
                         <p className="mb-3">Committed to transcribing/arranging K-POP songs:</p>
@@ -99,7 +99,7 @@ const Home = () => {
             </section>
             <section className="w-100 p-4 px-5 pb-5"> 
                 <h2 className="mb-4">Latest Arrangements/Transcriptions</h2>
-                <div className="row position-relative" style={{gap: "0.5rem", flexWrap: "nowrap"}}>
+                <div className="row position-relative home-latest-row" style={{gap: "0.5rem", flexWrap: "nowrap"}}>
                     {loading ? (
                         // Show 3 skeleton cards while loading
                         <>
@@ -110,7 +110,7 @@ const Home = () => {
                     ) : (
                         // Show actual cards when loaded
                         songs && songs.map((song, index) => (
-                            <div key={song.id || index} className="card col-4 song-card pointer">  
+                            <div key={song.id || index} className="card col-12 col-md-4 song-card pointer">  
                                 <div className="card-body pt-4 pb-4"> 
                                     <h4 className="card-title">{song.title}</h4>
                                     <h6 className="card-subtitle mb-4 text-muted">{song.artist}</h6>

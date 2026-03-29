@@ -142,11 +142,11 @@ const Search = () => {
             <div className="h2 pt-5 mb-3">Piano Arrangements/ Transcriptions</div>
         </section>
     </section>
-    <section className="p-4 px-5 pb-5">
+    <section className="p-4 px-5 pb-5 search-page">
         <h1 className="mb-4">Search</h1>
-        <div className="row">
-            <div style={{width: "70%"}}><SearchBar mode="light" width="100%"/></div>
-            <div className="d-flex align-items-center" style={{width: "30%", gap: "10px"}}>
+        <div className="row align-items-center search-top-row">
+            <div className="col-12 col-md-8 mb-3 mb-md-0"><SearchBar mode="light" width="100%"/></div>
+            <div className="col-12 col-md-4 d-flex align-items-center justify-content-md-end" style={{gap: "10px"}}>
                 <label htmlFor="order" style={{whiteSpace: "nowrap"}}>Order: </label>
                 <select 
                     className="form-select rounded-pill" 
@@ -169,8 +169,8 @@ const Search = () => {
                 </select>
             </div>
         </div>
-        <div className="row pt-3 pb-4">
-            <div className="col-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
+        <div className="row pt-3 pb-4 search-filter-row">
+            <div className="col-12 col-md-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
                 <label htmlFor="type" style={{whiteSpace: "nowrap"}}>Type: </label>
                 <select 
                     className="form-select rounded-pill" 
@@ -183,7 +183,7 @@ const Search = () => {
                     {types.map((type, index)=><option key={index} value={type}>{type}</option>)}
                 </select>
             </div>
-            <div className="col-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
+            <div className="col-12 col-md-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
                 <label htmlFor="artist-name" style={{whiteSpace: "nowrap"}}>Artist Name: </label>
                 <select 
                     className="form-select rounded-pill" 
@@ -196,7 +196,7 @@ const Search = () => {
                     {artists.map((artist, index)=><option key={index} value={artist}>{artist}</option>)}
                 </select>
             </div>
-            <div className="col-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
+            <div className="col-12 col-md-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
                 <label htmlFor="song-name" style={{whiteSpace: "nowrap"}}>Song Name: </label>
                 <select 
                     className="form-select rounded-pill" 
@@ -209,14 +209,14 @@ const Search = () => {
                     {titles.map((title, index)=><option key={index} value={title}>{title}</option>)}
                 </select>
             </div>
-            <div className="col-3 px-3 d-flex align-items-center justify-content-end" style={{gap: "2em"}}>
+            <div className="col-12 col-md-3 px-3 d-flex align-items-center justify-content-md-end" style={{gap: "2em"}}>
                 <button type="button" className="btn btn-light px-4" onClick={handleReset}>Reset</button>
                 <button type="button" className="btn btn-dark px-4" onClick={handleSearch}>Search</button>
             </div>
         </div>
-        <div className="row">
+        <div className="row row-cols-1 row-cols-md-3 g-3">
             {!loading && info.map((song, index) => 
-                <div className="col-4 my-3" key={index}>
+                <div className="col my-3" key={index}>
                     <div className="card song-card pointer" onClick={()=>navigate(`/detail?id=${song.id}`)}>
                         <img src={song.cover?.url} className="card-img-top" alt="card" style={{height: "14em"}}/>
                         <div className="card-body">

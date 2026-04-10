@@ -95,3 +95,19 @@
 #sidebar-container {
     animation: slideIn 0.3s ease-out;
 }
+
+.custom-toast {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.8);
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    z-index: 9999999;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    font-size: 16px;
+    opacity: 0.95;
+    transition: opacity 0.3s;
+}

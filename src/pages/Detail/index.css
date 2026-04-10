@@ -1,3 +1,12 @@
 .desc{
     font-size: 14px;
 }
+
+@media (max-width: 768px) {
+    .detail-video{
+        height: 50rem !important;
+    }
+    .detail-pdf{
+        height: 580px !important;
+    }
+}

@@ -5,7 +5,7 @@ import CherryBg from "../../assets/cherry-pattern-wallpaper.webp";
 import WordCloudComponent from "../../components/WordCloud";
 import Footer from "../../components/Footer";
 import Api from "../../utils/api";
-import words from "../../utils/constant";
+import { words } from "../../utils/constant";
 import "./index.css";
 
 const Home = () => {
@@ -79,8 +79,8 @@ const Home = () => {
                 </p>
             </section>
             <section className="w-100 row p-4 px-5 home-intro-row"> 
-                <div className="col-12 col-md-6"> 
-                    <WordCloudComponent words={words}/>
+                <div className="col-12 col-md-6 mb-3"> 
+                    <WordCloudComponent words={words} width={"100%"} height={"100%"}/>
                 </div>
                 <div className="col-12 col-md-6"> 
                     <section className="px-5"> 
@@ -98,20 +98,18 @@ const Home = () => {
                 </div>
             </section>
             <section className="w-100 p-4 px-5 pb-5"> 
-                <h2 className="mb-4">Latest Arrangements/Transcriptions</h2>
+                <h2 className="mb-4 pointer" onClick={() => navigate("/search")}>Latest Arrangements/Transcriptions</h2>
                 <div className="row position-relative home-latest-row" style={{gap: "0.5rem", flexWrap: "nowrap"}}>
                     {loading ? (
-                        // Show 3 skeleton cards while loading
                         <>
                             <SkeletonCard />
                             <SkeletonCard />
                             <SkeletonCard />
                         </>
                     ) : (
-                        // Show actual cards when loaded
                         songs && songs.map((song, index) => (
                             <div key={song.id || index} className="card col-12 col-md-4 song-card pointer">  
-                                <div className="card-body pt-4 pb-4"> 
+                                <div className="card-body pt-4 pb-4" onClick={() => navigate(`/detail?id=${song.id}`)}> 
                                     <h4 className="card-title">{song.title}</h4>
                                     <h6 className="card-subtitle mb-4 text-muted">{song.artist}</h6>
                                     <div>
@@ -132,7 +130,7 @@ const Home = () => {
                                 width: "auto !important",
                                 position: "absolute",
                                 right: "-2rem",
-                                top: "50%",
+                                top: "45%",
                                 cursor: "pointer",
                                 height: "0 !important"
                             }}

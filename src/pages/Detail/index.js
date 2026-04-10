@@ -13,33 +13,8 @@ const Detail = () => {
     const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState({});
     const [tags, setTags] = useState([]);
-    const [pdfViewerUrl, setPdfViewerUrl] = useState("");
 
     const id = searchParams.get("id");
-    // Helper function to extract public ID from Cloudinary URL
-    const extractPublicId = (url) => {
-        if (!url) return null;
-        
-        // Match pattern: /upload/v{timestamp}/path/to/file.pdf
-        const match = url.match(/\/upload\/(?:v\d+\/)?(.+)$/);
-        if (match) {
-            return match[1];
-        }
-        return null;
-    };
-
-    // Helper function to get viewable PDF URL using Cloudinary API
-    const getCloudinaryPdfViewerUrl = (pdfUrl) => {
-        if (!pdfUrl) return '';
-        
-        const publicId = extractPublicId(pdfUrl);
-        if (publicId) {
-            // Use Cloudinary's API endpoint with attachment=false for inline viewing
-            return `https://api.cloudinary.com/v1_1/dmbzvxqe9/raw/download?api_key=647627751715269&public_id=${encodeURIComponent(publicId)}&attachment=false`;
-        }
-        
-        return pdfUrl;
-    };
 
     useEffect(()=>{
         setLoading(true);
@@ -52,11 +27,6 @@ const Detail = () => {
         async function getSongDetail(){
             const response = await Api.get(`/api/song/${id}`);
             setInfo(response.data);
-
-            if (response.data.pdf_url) {
-                const viewerUrl = getCloudinaryPdfViewerUrl(response.data.pdf_url);
-                setPdfViewerUrl(viewerUrl);
-            }
         }
 
         async function getTags(){
@@ -69,12 +39,12 @@ const Detail = () => {
         })
     }, [id, navigate])
 
-
     useEffect(()=>{
         console.log(tags, info);
     }, [tags, info])
+
     return (<>
-        <SideBar link={info.video_url ? info.video_url : ''}/>
+        <SideBar link={info.video_url ? info.video_url : ''} songId={id}/>
         <NavBar mode="light"/>
         <section className="p-4 px-5 pb-5 detail-page">
             <nav aria-label="breadcrumb">
@@ -89,8 +59,8 @@ const Detail = () => {
             <div className="d-flex justify-content-start align-items-center mb-3" style={{gap: "1.5rem", fontSize: "18px"}}>
                 {!loading && tags.map((tag, id)=>{
                     return id % 2 === 0 ? 
-                    <span className="badge bg-info text-dark">{tag.tag}</span>:
-                    <span className="badge bg-primary text-light">{tag.tag}</span>
+                    <span className="badge bg-info text-dark" key={id}>{tag.tag}</span>:
+                    <span className="badge bg-primary text-light" key={id}>{tag.tag}</span>
                 })}
             </div>
             <p className="desc mb-4">Last updated: {info.release_date ? info.release_date : "/"}</p>
@@ -106,14 +76,47 @@ const Detail = () => {
                 />
             </div>
             <h5 className="mb-3">Score</h5>
-            <div className="mb-3 detail-media detail-pdf" style={{ height: '1000px', border: '1px solid #ddd', borderRadius: '8px' }}>
-                <iframe
-                    src={info.pdf_url ? info.pdf_url : ''}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 'none', borderRadius: '8px' }}
-                    title="PDF Viewer"
-                />
+            <div 
+                className="mb-3 detail-media detail-pdf" 
+                style={{ 
+                    height: '1000px', 
+                    border: '1px solid #ddd', 
+                    borderRadius: '8px',
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                    backgroundColor: '#f5f5f5'
+                }}
+            >
+                {info.pdf?.url ? (
+                    <div style={{ 
+                        display: 'flex', 
+                        justifyContent: 'center',
+                        minHeight: 'min-content'
+                    }}>
+                        <img 
+                            src={info.pdf?.url} 
+                            alt={`${info.title} score`}
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                display: 'block'
+                            }}
+                            onError={(e) => {
+                                e.target.style.display = 'none';
+                                const errorDiv = document.createElement('div');
+                                errorDiv.style.padding = '20px';
+                                errorDiv.style.textAlign = 'center';
+                                errorDiv.style.color = '#666';
+                                errorDiv.innerText = 'Unable to load score image. Please contact CherryProduction for assistance.';
+                                e.target.parentElement.appendChild(errorDiv);
+                            }}
+                        />
+                    </div>
+                ) : (
+                    <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+                        No score available
+                    </div>
+                )}
             </div>
             <p>If you prefer other format, please contact CherryProduction at Bilibili or Email.</p>
         </section>

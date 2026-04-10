@@ -1,18 +1,25 @@
 import React, { useEffect, useRef } from 'react';
 import WordCloud from 'wordcloud';
 
-const WordCloudComponent = ({ words, width = 600, height = 400 }) => {
+const WordCloudComponent = ({ words, width = "100%", height = "100%" }) => {
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    if (canvasRef.current && words.length > 0) {
+    if (canvasRef.current && words.length > 0 && containerRef.current) {
+      const containerWidth = containerRef.current.clientWidth;
+      const containerHeight = containerRef.current.clientHeight;
+      
+      canvasRef.current.width = containerWidth;
+      canvasRef.current.height = containerHeight;
+      
       const wordList = words.map(item => [item.text, item.weight]);
 
       const options = {
         list: wordList,
         gridSize: 16,
         weightFactor: function (w) {
-          return Math.pow(w, 0.8) * 5;
+          return Math.pow(w, 0.8) * (containerWidth / 200);
         },
         fontFamily: 'Arial, sans-serif',
         color: function(word, weight) { 
@@ -25,11 +32,6 @@ const WordCloudComponent = ({ words, width = 600, height = 400 }) => {
         weightMode: 'size',
         shrinkToFit: true,
         backgroundColor: "#FFF8E1",
-        padding: [40, 40],
-        shrink: { 
-            start: 20,
-            end: 100,
-        },
       };
 
       WordCloud(canvasRef.current, options);
@@ -38,16 +40,23 @@ const WordCloudComponent = ({ words, width = 600, height = 400 }) => {
 
   return (
     <div
+        ref={containerRef}
         style={{
             backgroundColor: "#FFF8E1",
-            padding: "30px",
-            borderRadius: '8px'
+            padding: "1rem",
+            borderRadius: '8px',
+            width: "100%",
+            height: "100%",
+            minHeight: "300px"
         }}
     >
         <canvas 
-        ref={canvasRef} 
-        width={width-90} 
-        height={height-30}
+          ref={canvasRef} 
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "block"
+          }}
         />
     </div>
   );

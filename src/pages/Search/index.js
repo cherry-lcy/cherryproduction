@@ -5,6 +5,7 @@ import Footer from "../../components/Footer";
 import SearchBar from "../../components/SearchBox";
 import Loading from "../../components/Loading";
 import Api from "../../utils/api";
+import { tagBgColors } from "../../utils/constant";
 import "./index.css";
 
 const Search = () => {
@@ -25,6 +26,8 @@ const Search = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const ITEMS_PER_PAGE = 9;  // 固定每页9条
+
     async function getTitles(artistName = null){
         const response = await Api.get(`/api/titles${artistName ? `/${encodeURIComponent(artistName)}` : ''}`);
         setTitles(response.titles);
@@ -40,7 +43,7 @@ const Search = () => {
             if (filter.sort_by) params.append('sort_by', filter.sort_by);
             if (filter.order) params.append('order', filter.order);
             params.append('page', currentPage);
-            params.append('per_page', 12);
+            params.append('per_page', ITEMS_PER_PAGE);
             
             const response = await Api.get(`/api/songs/search?${params.toString()}`);
             setInfo(response.data.songs);
@@ -145,8 +148,8 @@ const Search = () => {
     <section className="p-4 px-5 pb-5 search-page">
         <h1 className="mb-4">Search</h1>
         <div className="row align-items-center search-top-row">
-            <div className="col-12 col-md-8 mb-3 mb-md-0"><SearchBar mode="light" width="100%"/></div>
-            <div className="col-12 col-md-4 d-flex align-items-center justify-content-md-end" style={{gap: "10px"}}>
+            <div className="col-12 col-md-8 mb-md-0"><SearchBar mode="light" width="100%"/></div>
+            <div className="col-12 px-3 col-md-4 d-flex align-items-center justify-content-md-end" style={{gap: "10px"}}>
                 <label htmlFor="order" style={{whiteSpace: "nowrap"}}>Order: </label>
                 <select 
                     className="form-select rounded-pill" 
@@ -214,18 +217,18 @@ const Search = () => {
                 <button type="button" className="btn btn-dark px-4" onClick={handleSearch}>Search</button>
             </div>
         </div>
-        <div className="row row-cols-1 row-cols-md-3 g-3">
+        <div className="row row-cols-1 row-cols-lg-3 g-3">
             {!loading && info.map((song, index) => 
                 <div className="col my-3" key={index}>
                     <div className="card song-card pointer" onClick={()=>navigate(`/detail?id=${song.id}`)}>
-                        <img src={song.cover?.url} className="card-img-top" alt="card" style={{height: "14em"}}/>
+                        <img src={song.cover?.url} className="card-img-top" alt="card" style={{height: "12em"}}/>
                         <div className="card-body">
                             <h4 className="card-title">{song.title}</h4>
                             <h6 className="card-subtitle text-muted mb-3">{song.artist}</h6>
                             {song.tags && song.tags.length > 0 && (
                                 <div className="mb-2">
                                     {song.tags.slice(0, 3).map((tag, idx) => (
-                                        <span key={idx} className="badge bg-secondary me-1">{tag}</span>
+                                        <span key={idx} className={`badge ${tagBgColors[idx % tagBgColors.length]} bg-gradient me-1`}>{tag}</span>
                                     ))}
                                 </div>
                             )}

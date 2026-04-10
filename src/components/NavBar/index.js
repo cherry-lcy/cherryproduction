@@ -1,36 +1,74 @@
 import { useNavigate } from 'react-router-dom';
-
+import { useState, useEffect, useRef } from 'react';
 import SearchBar from '../SearchBox';
-import "./index.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import './index.css';
 
-const NavBar = ({mode}) => {
+const NavBar = ({ mode }) => {
     const navigate = useNavigate();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const menuRef = useRef(null);
 
-    return (<div className={`w-100 navbar ${mode === "light" ? "light" : "dark"}`}>
-        <div className="row navbar-row align-items-center justify-content-center w-100 m-0 gx-2">
-            <div className="col-12 col-md-5 pt-3 pb-3 px-5 p-3">
-                <div className="h5 mb-0 pointer" onClick={()=>navigate("/")}>CHERRY PRODUCTION</div>
-            </div>
-            <div className="col-12 col-md-7 pt-3 pb-3">
-                <div className="row align-items-center justify-content-center gx-2">
-                    <div className="col-12 col-sm-4 text-center text-sm-start">
-                        <div className="nav" onClick={()=>navigate("/search")}>Piano Arrangements</div>
-                    </div>
-                    <div className="col-6 col-sm-2 text-center">
-                        <div className="nav" onClick={()=>window.open("https://space.bilibili.com/3546599764527382", "_blank")}>Bilibili</div>
-                    </div>
-                    <div className="col-6 col-sm-2 text-center">
-                        <div className="nav mx-2">简</div>
-                        /
-                        <div className="nav mx-2">繁</div>
-                    </div>
-                    <div className="col-12 col-sm-4 px-4">
-                        <SearchBar mode={mode}/>
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!mobileMenuOpen);
+    };
+
+    const handleNavigation = (path) => {
+        navigate(path);
+        setMobileMenuOpen(false);
+    };
+
+    const handleExternalLink = (url) => {
+        window.open(url, "_blank");
+        setMobileMenuOpen(false);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setMobileMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 768) {
+                setMobileMenuOpen(false);
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return (
+        <div className={`navbar ${mode === "light" ? "light" : "dark"}`}>
+            <div className="navbar-row">
+                <div className="navbar-brand" onClick={() => handleNavigation("/")}>
+                    CHERRY PRODUCTION
+                </div>
+                <div className="navbar-content" ref={menuRef}>
+                    <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+                        <i className="bi bi-list"></i>
+                    </button>
+                    <div className={`navbar-menu ${mobileMenuOpen ? 'open' : ''}`}>
+                        <div className="nav" onClick={() => handleNavigation("/search")}>Piano Arrangements</div>
+                        <div className="nav" onClick={() => handleExternalLink("https://space.bilibili.com/3546599764527382")}>Bilibili</div>
+                        <div className="nav-language">
+                            <span className="nav">简</span>
+                            <span>/</span>
+                            <span className="nav">繁</span>
+                        </div>
+                        <div className="search-bar-container">
+                            <SearchBar mode={mode} width={"100%"} />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>);
-}
+    );
+};
 
 export default NavBar;

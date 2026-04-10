@@ -279,7 +279,7 @@ const AdminUpload = () => {
                             id="piece-file"
                             type="file"
                             className="form-control"
-                            accept=".pdf"
+                            accept="image/*"
                             onChange={handleFileChange(setPdfFile)}
                         />
                         {pdfFile && (

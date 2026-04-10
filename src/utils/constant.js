@@ -17,4 +17,9 @@ const words = [
     {text: "Passion", weight: 25},
 ];
 
-export default words;
+const tagBgColors = ["bg-primary", "bg-info", "blue"]
+
+export {
+    words, 
+    tagBgColors
+};

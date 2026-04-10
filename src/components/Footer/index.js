@@ -11,13 +11,13 @@ const Footer = () => {
         <div class="row mb-3">
             <div class="row">
                 <div class="col-4">
-                    <div class="nav" onClick={()=>navigate("/")}>Home</div>
+                    <div class="nav text-start" onClick={()=>navigate("/")}>Home</div>
                 </div>
                 <div class="col-4">
-                    <div class="nav" onClick={()=>navigate("/search")}>Piano Arrangements</div>
+                    <div class="nav text-start" onClick={()=>navigate("/search")}>Piano Arrangements</div>
                 </div>
                 <div class="col-4">
-                    <div class="nav" onClick={()=>window.open("https://space.bilibili.com/3546599764527382", "_blank")}>Bilibili</div>
+                    <div class="nav text-start" onClick={()=>window.open("https://space.bilibili.com/3546599764527382", "_blank")}>Bilibili</div>
                 </div>
             </div>
         </div>

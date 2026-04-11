@@ -11,14 +11,17 @@ const Footer = () => {
         <h4 class="mb-4 pointer" onClick={()=>navigate("/")}>CHERRY PRODUCTION</h4>
         <div class="row mb-3">
             <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                     <div class="nav text-start" onClick={()=>navigate("/")}>{t("common.home")}</div>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <div class="nav text-start" onClick={()=>navigate("/search")}>{t("nav.pianoArrangements")}</div>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <div class="nav text-start" onClick={()=>window.open("https://space.bilibili.com/3546599764527382", "_blank")}>{t("nav.bilibili")}</div>
+                </div>
+                <div class="col-3">
+                    <div class="nav text-start" onClick={()=>navigate("/privacy")}>{t("privacy.title")}</div>
                 </div>
             </div>
         </div>

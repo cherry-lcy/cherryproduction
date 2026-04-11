@@ -20,7 +20,7 @@
   },
   "home": {
     "title": "Cherry Production",
-    "about": "關於我們",
+    "about": "關於Cherry Production",
     "aboutText1": "Cherry Production，源於熱愛，業餘編曲與扒譜。",
     "aboutText2": "改編喜歡的K-pop歌曲；歡迎投稿和推薦。",
     "contact": "聯絡方式",
@@ -83,5 +83,51 @@
   "footer": {
     "copyright": "© 2026 Cherry Production。保留所有權利。",
     "contact": "聯絡我們"
+  },
+  "privacy": {
+    "title": "私隱聲明",
+    "lastUpdated": "最後更新：2026年4月11日",
+    "intro": {
+      "title": "引言",
+      "content": "Cherry Production尊重您的私隱。本私隱聲明解釋當您訪問Cherry Production的網站時Cherry Production收集哪些基本訪問數據以及Cherry Production如何使用這些數據。"
+    },
+    "dataCollected": {
+      "title": "Cherry Production收集的基本訪問數據",
+      "description": "與大多數網站一樣，Cherry Production會自動收集以下基本技術數據，用於運行和分析目的：",
+      "urlPath": "URL路徑：",
+      "urlPathDesc": "您訪問的頁面",
+      "method": "請求方法：",
+      "methodDesc": "GET（瀏覽）或 POST（提交）",
+      "statusCode": "狀態碼：",
+      "statusCodeDesc": "200（成功）、404（未找到）、500（伺服器錯誤）",
+      "userAgent": "用戶代理：",
+      "userAgentDesc": "瀏覽器和操作系統信息",
+      "referrer": "來源頁面：",
+      "referrerDesc": "您從哪個網站跳轉而來",
+      "duration": "處理耗時：",
+      "durationDesc": "伺服器響應所花費的時間",
+      "ip": "IP地址：",
+      "ipDesc": "大致地理位置和獨立訪客計數"
+    },
+    "purpose": {
+      "title": "Cherry Production如何使用這些數據",
+      "content": "Cherry Production僅使用這些數據來了解網站流量、監控性能、識別響應慢的問題以及改善用戶體驗。Cherry Production不會嘗試識別個人訪客身份。"
+    },
+    "retention": {
+      "title": "數據保留",
+      "content": "基本訪問日誌出於安全和故障排查目的保留最多30天，之後自動刪除。"
+    },
+    "sharing": {
+      "title": "數據共享",
+      "content": "Cherry Production不會出售、交易或向第三方傳輸您的數據。匯總統計信息（例如總頁面瀏覽量）可能在內部共享，但不包含任何個人數據。"
+    },
+    "rights": {
+      "title": "您的權利",
+      "content": "由於Cherry Production不收集個人身份信息，因此沒有需要訪問或刪除的個人數據。如果您有疑慮，可以使用下面的郵箱聯繫Cherry Production。"
+    },
+    "contact": {
+      "title": "聯繫",
+      "content": "如果您對本私隱聲明有任何疑問，請通過以下郵箱聯繫Cherry Production：@qq.com"
+    }
   }
 }

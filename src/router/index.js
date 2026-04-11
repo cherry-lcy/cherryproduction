@@ -4,6 +4,7 @@ import Search from "../pages/Search";
 import Detail from '../pages/Detail';
 import AdminLogin from "../pages/AdminLogin";
 import AdminUpload from "../pages/AdminUpload";
+import Privacy from '../pages/Privacy';
 
 const router = createBrowserRouter([
     {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
     {
         path: "/detail",
         element: <Detail/>
+    },
+    {
+        path: "/privacy",
+        element: <Privacy/>
     },
     {
         path: "/admin/login",

@@ -83,5 +83,51 @@
   "footer": {
     "copyright": "© 2026 Cherry Production. All rights reserved.",
     "contact": "Contact Us"
+  },
+  "privacy": {
+    "title": "Privacy Statement",
+    "lastUpdated": "Last updated: April 11, 2026",
+    "intro": {
+      "title": "Introduction",
+      "content": "Cherry Production respects your privacy. This Privacy Statement explains what basic access data Cherry Production collect when you visit our website and how Cherry Production use it."
+    },
+    "dataCollected": {
+      "title": "Basic Access Data Cherry Production Collect",
+      "description": "Like most websites, Cherry Production automatically collect the following basic technical data for operational and analytical purposes:",
+      "urlPath": "URL path:",
+      "urlPathDesc": "Which page you visited",
+      "method": "Request method:",
+      "methodDesc": "GET (viewing) or POST (submitting)",
+      "statusCode": "Status code:",
+      "statusCodeDesc": "200 (success), 404 (not found), 500 (server error)",
+      "userAgent": "User agent:",
+      "userAgentDesc": "Browser and operating system information",
+      "referrer": "Referrer:",
+      "referrerDesc": "Which website you came from (if any)",
+      "duration": "Processing time:",
+      "durationDesc": "How long the server took to respond",
+      "ip": "IP address:",
+      "ipDesc": "Rough geographic location and unique visitor count"
+    },
+    "purpose": {
+      "title": "How Cherry Production Use This Data",
+      "content": "Cherry Production use this data solely to understand website traffic, monitor performance, identify slow responses, and improve user experience. Cherry Production do not attempt to identify individual visitors."
+    },
+    "retention": {
+      "title": "Data Retention",
+      "content": "Basic access logs are kept for up to 30 days for security and troubleshooting purposes, then automatically deleted."
+    },
+    "sharing": {
+      "title": "Data Sharing",
+      "content": "Cherry Production do not sell, trade, or transfer your data to third parties. Aggregated statistics (e.g., total page views) may be shared internally, but no personal data is included."
+    },
+    "rights": {
+      "title": "Your Rights",
+      "content": "Since Cherry Production do not collect personally identifiable information, there is no personal data to access or delete. If you have concerns, you may contact Cherry Production using the email below."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "content": "If you have any questions about this Privacy Statement, please contact Cherry Production at: @qq.com"
+    }
   }
 }

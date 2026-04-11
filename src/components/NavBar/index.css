@@ -24,14 +24,14 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
-    padding: 0 20px;
+    padding: 0 3rem;
     width: 100%;
 }
 
 .navbar-brand {
     flex-shrink: 0;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     padding: 10px 0;
 }
@@ -56,7 +56,7 @@
 .navbar-menu {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 50px;
 }
 
 .navbar-menu .nav {
@@ -96,6 +96,7 @@
 
     .navbar-row {
         width: auto;
+        padding: 0 1rem;
     }
 
     .navbar-menu {
@@ -177,7 +178,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 30px;
+        gap: 80px;
         position: static;
         opacity: 1;
         visibility: visible;

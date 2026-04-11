@@ -1,0 +1,87 @@
+{
+  "common": {
+    "home": "首页",
+    "search": "搜索",
+    "about": "关于",
+    "contact": "联系",
+    "learnMore": "了解更多",
+    "close": "关闭",
+    "copy": "复制",
+    "copied": "已复制！",
+    "reset": "重置",
+    "viewMore": "查看更多",
+    "noResult": "未找到相关结果",
+    "previous": "上一页",
+    "next": "下一页"
+  },
+  "nav": {
+    "pianoArrangements": "钢琴改编",
+    "bilibili": "哔哩哔哩"
+  },
+  "home": {
+    "title": "Cherry Production",
+    "about": "关于我们",
+    "aboutText1": "Cherry Production，为爱发电，业余编曲与扒谱。",
+    "aboutText2": "改编喜欢的K-pop歌曲；欢迎投稿和推荐。",
+    "contact": "联系方式",
+    "bilibili": "哔哩哔哩：CherryProduction",
+    "email": "邮箱：@qq.com",
+    "pianoArrangements": "钢琴改编作品",
+    "committed": "致力于扒谱/改编K-POP歌曲：",
+    "features": {
+      "preserve": "最大程度保留原曲风格",
+      "playable": "打造可演奏的改编版本",
+      "rich": "丰富细腻的和声织体"
+    },
+    "latest": "最新改编/扒谱作品",
+    "noScore": "暂无乐谱"
+  },
+  "search": {
+    "title": "搜索",
+    "pageTitle": "钢琴改编作品 / 扒谱作品",
+    "orderLabel": "排序：",
+    "typeLabel": "类型：",
+    "artistLabel": "艺人：",
+    "songLabel": "歌曲名：",
+    "allTypes": "全部类型",
+    "allArtists": "全部艺人",
+    "allSongs": "全部歌曲",
+    "sortOptions": {
+      "newToOld": "时间：从新到旧",
+      "oldToNew": "时间：从旧到新",
+      "titleAsc": "歌曲名：正序",
+      "titleDesc": "歌曲名：倒序",
+      "artistAsc": "艺术家：正序",
+      "artistDesc": "艺术家：倒序"
+    },
+    "noResults": "未找到相关结果",
+    "viewDetails": "查看详情"
+  },
+  "detail": {
+    "lastUpdated": "最后更新",
+    "transcriptions": "扒谱",
+    "arrangements": "改编",
+    "video": "视频",
+    "score": "乐谱",
+    "noScore": "暂无可用乐谱",
+    "otherFormat": "如需其他格式，请联系 CherryProduction（Bilibili或邮箱）。",
+    "share": "分享这首歌",
+    "shareLink": "分享这个链接：",
+    "shareVia": "或通过以下方式分享：",
+    "copyLink": "复制",
+    "linkCopied": "链接已复制！"
+  },
+  "language": {
+    "select": "选择语言",
+    "english": "Eng",
+    "simplified": "简",
+    "traditional": "繁"
+  },
+  "loading": {
+    "message": "加载中..."
+  },
+  "footer": {
+    "copyright": "© 2026 Cherry Production。保留所有权利。",
+    "contact": "联系我们"
+  }
+}

@@ -6,9 +6,11 @@ import WordCloudComponent from "../../components/WordCloud";
 import Footer from "../../components/Footer";
 import Api from "../../utils/api";
 import { words } from "../../utils/constant";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./index.css";
 
 const Home = () => {
+    const {t, language} = useLanguage();
     const navigate = useNavigate();
     const [songs, setSongs] = useState([]);
     const [tags, setTags] = useState({});
@@ -66,39 +68,39 @@ const Home = () => {
                 />
             </section>
             <section className="p-4 px-5"> 
-                <h1 className="mb-4">About</h1>
+                <h1 className="mb-4">{t("home.about")}</h1>
                 <p className="mb-3">
-                    Cherry Production, fueled by love, amateur arrangement and transcription.
+                    {t("home.aboutText1")}
                     <br/>
-                    Adapt favorite K-pop songs; submissions and recommendations are welcome.
+                    {t("home.aboutText2")}
                 </p>
                 <p className="mb-3">
-                    Bilibili: CherryProduction
+                    {t("home.bilbili")}
                     <br/>
-                    Email: @qq.com
+                    {t("home.email")}
                 </p>
             </section>
             <section className="w-100 row p-4 px-5 home-intro-row"> 
                 <div className="col-12 col-md-6 mb-3"> 
-                    <WordCloudComponent words={words} width={"100%"} height={"100%"}/>
+                    <WordCloudComponent words={words} width={"100%"} height={"100%"} language={language}/>
                 </div>
                 <div className="col-12 col-md-6"> 
                     <section className="px-5"> 
-                        <h1 className="mb-4">Piano Arrangements</h1>
-                        <p className="mb-3">Committed to transcribing/arranging K-POP songs:</p>
+                        <h1 className="mb-4">{t("home.pianoArrangements")}</h1>
+                        <p className="mb-3">{t("home.committed")}</p>
                         <ul className="features mb-5"> 
-                            <li>Preserving the original style to the fullest</li>
-                            <li>Crafting playable arrangements</li>
-                            <li>With rich and intricate textures</li>
+                            <li>{t("home.features.preserve")}</li>
+                            <li>{t("home.features.playable")}</li>
+                            <li>{t("home.features.rich")}</li>
                         </ul>
                         <button type="button" className="btn btn-light" onClick={() => navigate("/search")}>
-                            Learn more
+                            {t("common.learnMore")}
                         </button>
                     </section>
                 </div>
             </section>
             <section className="w-100 p-4 px-5 pb-5"> 
-                <h2 className="mb-4 pointer" onClick={() => navigate("/search")}>Latest Arrangements/Transcriptions</h2>
+                <h2 className="mb-4 pointer" onClick={() => navigate("/search")}>{t("home.latest")}</h2>
                 <div className="row position-relative home-latest-row" style={{gap: "0.5rem", flexWrap: "nowrap"}}>
                     {loading ? (
                         <>

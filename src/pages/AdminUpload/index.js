@@ -6,6 +6,8 @@ import api from "../../utils/api";
 
 const AdminUpload = () => {
     const [title, setTitle] = useState("");
+    const [zhcnTitle, setZhcnTitle] = useState("");
+    const [zhhkTitle, setZhhkTitle] = useState("");
     const [artist, setArtist] = useState("");
     const [type, setType] = useState("");
     const [releaseDate, setReleaseDate] = useState("");
@@ -42,6 +44,8 @@ const AdminUpload = () => {
 
         const formData = new FormData();
         formData.append("title", title);
+        formData.append("title_zhcn", zhcnTitle !== "" ? zhcnTitle : title);
+        formData.append("title_zhhk", zhhkTitle !== "" ? zhhkTitle : title);
         formData.append("artist", artist);
         formData.append("type", type);
         formData.append("release_date", releaseDate);
@@ -73,6 +77,8 @@ const AdminUpload = () => {
             } else if (response && response.song && response2 && response2.tag && response3 && response3.tag) {
                 setMessage("Song uploaded successfully.");
                 setTitle("");
+                setZhcnTitle("");
+                setZhhkTitle("");
                 setArtist("");
                 setType("");
                 setReleaseDate("");
@@ -125,6 +131,8 @@ const AdminUpload = () => {
             } else if (response && response.song) {
                 setMessage("Song deleted successfully.");
                 setTitle("");
+                setZhcnTitle("");
+                setZhhkTitle("");
                 setArtist("");
                 setType("");
                 setReleaseDate("");
@@ -171,6 +179,32 @@ const AdminUpload = () => {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label htmlFor="piece-title" className="form-label">
+                            Title (简体中文)
+                        </label>
+                        <input
+                            id="piece-title"
+                            type="text"
+                            className="form-control"
+                            value={zhcnTitle}
+                            onChange={(e) => setZhcnTitle(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label htmlFor="piece-title" className="form-label">
+                            Title (繁體中文)
+                        </label>
+                        <input
+                            id="piece-title"
+                            type="text"
+                            className="form-control"
+                            value={zhhkTitle}
+                            onChange={(e) => setZhhkTitle(e.target.value)}
                         />
                     </div>
                     

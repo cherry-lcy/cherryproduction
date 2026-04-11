@@ -4,10 +4,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import router from './router';
 import {RouterProvider} from "react-router-dom";
+import './locales/i18n';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <LanguageProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </LanguageProvider>
   </React.StrictMode>
 );

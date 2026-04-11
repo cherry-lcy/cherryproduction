@@ -5,9 +5,11 @@ import Footer from "../../components/Footer";
 import SideBar from "../../components/SideBar";
 import Loading from "../../components/Loading";
 import Api from "../../utils/api";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./index.css";
 
 const Detail = () => {
+    const {t, language} = useLanguage();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -49,12 +51,26 @@ const Detail = () => {
         <section className="p-4 px-5 pb-5 detail-page">
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                    <li className="breadcrumb-item"><Link to="/search">{info.type ? info.type : ""}</Link></li>
-                    <li className="breadcrumb-item active">{info.title ? info.title : ''}</li>
+                    <li className="breadcrumb-item"><Link to="/">{t("common.home")}</Link></li>
+                    <li className="breadcrumb-item"><Link to="/search">
+                        {info.type ? 
+                            (info.type === "Transcriptions" ? t("detail.transcriptions") : t("detail.arrangements")) 
+                        : ""}
+                    </Link></li>
+                    <li className="breadcrumb-item active">
+                        {info.title ? (language === "en" ? info.title :
+                            (language === "zh-CN" ? info.title_zhcn : info.title_zhhk)
+                        ) 
+                        : ''}
+                    </li>
                 </ol>
             </nav>
-            <h1 className="mb-3">{info.title ? info.title : ''}</h1>
+            <h1 className="mb-3">
+                {info.title ? (language === "en" ? info.title :
+                    (language === "zh-CN" ? info.title_zhcn : info.title_zhhk)
+                ) 
+                : ''}
+            </h1>
             <h5 className="text-muted mb-3">{info.artist? info.artist : ''}</h5>
             <div className="d-flex justify-content-start align-items-center mb-3" style={{gap: "1.5rem", fontSize: "18px"}}>
                 {!loading && tags.map((tag, id)=>{
@@ -63,9 +79,9 @@ const Detail = () => {
                     <span className="badge bg-primary text-light" key={id}>{tag.tag}</span>
                 })}
             </div>
-            <p className="desc mb-4">Last updated: {info.release_date ? info.release_date : "/"}</p>
+            <p className="desc mb-4">{t("detail.lastUpdated")}: {info.release_date ? info.release_date : "/"}</p>
             <audio className="mb-3" src={info.audio_url ? info.audio_url : ""} controls></audio>
-            <h5 className="mb-2">Video</h5>
+            <h5 className="mb-2">{t("detail.video")}</h5>
             <div className="mb-4 detail-media detail-video" style={{ height: '700px', border: '1px solid #ddd', borderRadius: '8px' }}>
                 <iframe
                     src={info.video_url ? info.video_url : ""}
@@ -75,7 +91,7 @@ const Detail = () => {
                     title="Video Viewer"
                 />
             </div>
-            <h5 className="mb-3">Score</h5>
+            <h5 className="mb-3">{t("detail.score")}</h5>
             <div 
                 className="mb-3 detail-media detail-pdf" 
                 style={{ 
@@ -114,11 +130,11 @@ const Detail = () => {
                     </div>
                 ) : (
                     <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
-                        No score available
+                        {t("detail.noScore")}
                     </div>
                 )}
             </div>
-            <p>If you prefer other format, please contact CherryProduction at Bilibili or Email.</p>
+            <p>{t("detail.otherFormat")}</p>
         </section>
         <Footer/>
         {loading && <Loading/>}

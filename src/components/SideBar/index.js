@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./index.css";
 
 const SideBar = ({ link, songId }) => {
+    const {t, language} = useLanguage();
     const [showShareDialog, setShowShareDialog] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
@@ -9,23 +11,21 @@ const SideBar = ({ link, songId }) => {
     const currentUrl = window.location.href;
 
     const handleShare = async () => {
-        // Copy current URL to clipboard
         try {
             await navigator.clipboard.writeText(currentUrl);
-            setToastMessage("link copy successfully");
+            setToastMessage(t("detail.linkCopied"));
             setShowToast(true);
             setTimeout(() => {
                 setShowToast(false);
             }, 100000);
         } catch (err) {
-            // fallback
             const textarea = document.createElement('textarea');
             textarea.value = currentUrl;
             document.body.appendChild(textarea);
             textarea.select();
             document.execCommand('copy');
             document.body.removeChild(textarea);
-            setToastMessage("link copy successfully");
+            setToastMessage(t("detail.linkCopied"));
             setShowToast(true);
             setTimeout(() => {
                 setShowToast(false);

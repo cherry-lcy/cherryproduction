@@ -1,0 +1,87 @@
+{
+  "common": {
+    "home": "Home",
+    "search": "Search",
+    "about": "About",
+    "contact": "Contact",
+    "learnMore": "Learn More",
+    "close": "Close",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "reset": "Reset",
+    "viewMore": "View More",
+    "noResult": "No result matched",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "nav": {
+    "pianoArrangements": "Piano Arrangements",
+    "bilibili": "Bilibili"
+  },
+  "home": {
+    "title": "Cherry Production",
+    "about": "About",
+    "aboutText1": "Cherry Production, fueled by love, amateur arrangement and transcription.",
+    "aboutText2": "Adapt favorite K-pop songs; submissions and recommendations are welcome.",
+    "contact": "Contact",
+    "bilibili": "Bilibili: CherryProduction",
+    "email": "Email: @qq.com",
+    "pianoArrangements": "Piano Arrangements",
+    "committed": "Committed to transcribing/arranging K-POP songs:",
+    "features": {
+      "preserve": "Preserving the original style to the fullest",
+      "playable": "Crafting playable arrangements",
+      "rich": "With rich and intricate textures"
+    },
+    "latest": "Latest Arrangements/Transcriptions",
+    "noScore": "No score available"
+  },
+  "search": {
+    "title": "Search",
+    "pageTitle": "Piano Arrangements / Transcriptions",
+    "orderLabel": "Order:",
+    "typeLabel": "Type:",
+    "artistLabel": "Artist Name:",
+    "songLabel": "Song Name:",
+    "allTypes": "All types",
+    "allArtists": "All Artists",
+    "allSongs": "All Songs",
+    "sortOptions": {
+      "newToOld": "Time: From new to old",
+      "oldToNew": "Time: From old to new",
+      "titleAsc": "Song Title: Alphabetical Order",
+      "titleDesc": "Song Title: Reverse Alphabetical Order",
+      "artistAsc": "Artist: Alphabetical Order",
+      "artistDesc": "Artist: Reverse Alphabetical Order"
+    },
+    "noResults": "No result matched",
+    "viewDetails": "View Details"
+  },
+  "detail": {
+    "lastUpdated": "Last updated",
+    "transcriptions": "Transcriptions",
+    "arrangements": "Arrangements",
+    "video": "Video",
+    "score": "Score",
+    "noScore": "No score available",
+    "otherFormat": "If you prefer other format, please contact CherryProduction at Bilibili or Email.",
+    "share": "Share this song",
+    "shareLink": "Share this link with others:",
+    "shareVia": "Or share via:",
+    "copyLink": "Copy",
+    "linkCopied": "Link copied successfully!"
+  },
+  "language": {
+    "select": "Select Language",
+    "english": "Eng",
+    "simplified": "简",
+    "traditional": "繁"
+  },
+  "loading": {
+    "message": "Loading..."
+  },
+  "footer": {
+    "copyright": "© 2026 Cherry Production. All rights reserved.",
+    "contact": "Contact Us"
+  }
+}

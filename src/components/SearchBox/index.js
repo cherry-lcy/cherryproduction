@@ -4,7 +4,7 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './index.css';
 
-const SearchBar = ({ mode = "light", onSearch, placeholder = "Search", width = "200px" }) => {
+const SearchBar = ({ mode = "light", onSearch, onChange, placeholder = "Search", width = "200px" }) => {
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
@@ -24,7 +24,10 @@ const SearchBar = ({ mode = "light", onSearch, placeholder = "Search", width = "
         <Form.Control
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            onChange(e.target.value);
+          }}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}

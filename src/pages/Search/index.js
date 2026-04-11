@@ -1,15 +1,18 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 import SearchBar from "../../components/SearchBox";
 import Loading from "../../components/Loading";
 import Api from "../../utils/api";
 import { tagBgColors } from "../../utils/constant";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./index.css";
 
 const Search = () => {
     const navigate = useNavigate();
+    const { t, language } = useLanguage();
     const [searchParams] = useSearchParams();
     const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState([]);
@@ -20,13 +23,14 @@ const Search = () => {
         artist: searchParams.get("artist") ? searchParams.get("artist") : "", 
         title: searchParams.get("title") ? searchParams.get("title") : "",
         type: searchParams.get("type") ? searchParams.get("type") : "",
-        order: searchParams.get("order") ? searchParams.get("order") : "desc"
+        order: searchParams.get("order") ? searchParams.get("order") : "desc",
+        query: searchParams.get("q") ? searchParams.get("q") : ""
     });
     const [types, setTypes] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const ITEMS_PER_PAGE = 9;  // 固定每页9条
+    const ITEMS_PER_PAGE = 9;
 
     async function getTitles(artistName = null){
         const response = await Api.get(`/api/titles${artistName ? `/${encodeURIComponent(artistName)}` : ''}`);
@@ -42,8 +46,10 @@ const Search = () => {
             if (filter.type && filter.type !== "-1") params.append('type', filter.type);
             if (filter.sort_by) params.append('sort_by', filter.sort_by);
             if (filter.order) params.append('order', filter.order);
+            if (filter.query) params.append('q', filter.query);
             params.append('page', currentPage);
             params.append('per_page', ITEMS_PER_PAGE);
+            params.append('language', language);
             
             const response = await Api.get(`/api/songs/search?${params.toString()}`);
             setInfo(response.data.songs);
@@ -54,6 +60,12 @@ const Search = () => {
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        if (!loading) {
+            searchSongs();
+        }
+    }, [language]);
 
     useEffect(()=>{
         async function getArtists(){
@@ -70,12 +82,6 @@ const Search = () => {
             searchSongs();
         });
     }, []);
-
-    useEffect(() => {
-        if (artists.length > 0 || types.length > 0) {
-            searchSongs();
-        }
-    }, [filter, currentPage]);
 
     const handleFilter = (e) => {
         if(e.target.value === "1" || e.target.value === "2"){
@@ -122,10 +128,12 @@ const Search = () => {
             artist: "",
             title: "",
             type: "",
-            order: "desc"
+            order: "desc",
+            query: ""
         });
         setCurrentPage(1);
         getTitles();
+        setTimeout(() => searchSongs(), 0);
     }
 
     const handleSearch = () => {
@@ -138,19 +146,59 @@ const Search = () => {
         window.scrollTo(0, 0);
     }
 
+    useEffect(() => {
+        if (currentPage === 1) {
+            searchSongs();
+        }
+    }, [filter.sort_by, filter.order, filter.artist, filter.title, filter.type, filter.query]);
+
+    useEffect(() => {
+        if (currentPage !== 1) {
+            searchSongs();
+        }
+    }, [currentPage]);
+
     return (<>
     <section className="header-section w-100">
         <NavBar mode="dark"/>
         <section className="section-text">
-            <div className="h2 pt-5 mb-3">Piano Arrangements/ Transcriptions</div>
+            <div className="h2 pt-5 mb-3">{t('search.pageTitle')}</div>
         </section>
     </section>
     <section className="p-4 px-5 pb-5 search-page">
-        <h1 className="mb-4">Search</h1>
+        <h1 className="mb-4">{t('search.title')}</h1>
         <div className="row align-items-center search-top-row">
-            <div className="col-12 col-md-8 mb-md-0"><SearchBar mode="light" width="100%"/></div>
+            <div className="col-12 col-md-8 mb-md-0">
+                <SearchBar 
+                    mode="light" 
+                    width="100%"
+                    onSearch={(query) => {
+                        setFilter({
+                            ...filter,
+                            artist: '',
+                            title: '',
+                            type: '',
+                            tag: '',
+                            query: query
+                        });
+                        setCurrentPage(1);
+                    }}
+                    onChange={(query) => {
+                        setFilter({
+                            ...filter,
+                            artist: '',
+                            title: '',
+                            type: '',
+                            tag: '',
+                            query: query
+                        });
+                        setCurrentPage(1);
+                    }}
+                    placeholder={t("common.search")}
+                />
+            </div>
             <div className="col-12 px-3 col-md-4 d-flex align-items-center justify-content-md-end" style={{gap: "10px"}}>
-                <label htmlFor="order" style={{whiteSpace: "nowrap"}}>Order: </label>
+                <label htmlFor="order" style={{whiteSpace: "nowrap"}}>{t('search.orderLabel')}</label>
                 <select 
                     className="form-select rounded-pill" 
                     name="order" 
@@ -163,18 +211,18 @@ const Search = () => {
                         filter.sort_by === "artist" && filter.order === "asc" ? "5" : "6"
                     }
                 >
-                    <option value="1">Time: From new to old</option>
-                    <option value="2">Time: From old to new</option>
-                    <option value="3">Song Title: Alphabatical Order</option>
-                    <option value="4">Song Title:Reverse Alphabatical Order</option>
-                    <option value="5">Artist: Alphabatical Order</option>
-                    <option value="6">Artist: Reverse Alphabatical Order</option>
+                    <option value="1">{t('search.sortOptions.newToOld')}</option>
+                    <option value="2">{t('search.sortOptions.oldToNew')}</option>
+                    <option value="3">{t('search.sortOptions.titleAsc')}</option>
+                    <option value="4">{t('search.sortOptions.titleDesc')}</option>
+                    <option value="5">{t('search.sortOptions.artistAsc')}</option>
+                    <option value="6">{t('search.sortOptions.artistDesc')}</option>
                 </select>
             </div>
         </div>
         <div className="row pt-3 pb-4 search-filter-row">
             <div className="col-12 col-md-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
-                <label htmlFor="type" style={{whiteSpace: "nowrap"}}>Type: </label>
+                <label htmlFor="type" style={{whiteSpace: "nowrap"}}>{t('search.typeLabel')}</label>
                 <select 
                     className="form-select rounded-pill" 
                     name="type" 
@@ -182,12 +230,12 @@ const Search = () => {
                     value={filter.type || "-1"}
                     onChange={e=>handlefieldFilter(e, 'type')}
                 >
-                    <option value="-1">All types</option>
+                    <option value="-1">{t('search.allTypes')}</option>
                     {types.map((type, index)=><option key={index} value={type}>{type}</option>)}
                 </select>
             </div>
             <div className="col-12 col-md-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
-                <label htmlFor="artist-name" style={{whiteSpace: "nowrap"}}>Artist Name: </label>
+                <label htmlFor="artist-name" style={{whiteSpace: "nowrap"}}>{t('search.artistLabel')}</label>
                 <select 
                     className="form-select rounded-pill" 
                     name="artist-name" 
@@ -195,12 +243,12 @@ const Search = () => {
                     value={filter.artist || "-1"}
                     onChange={e => handlefieldFilter(e, 'artist')}
                 >
-                    <option value="-1">All Artists</option>
+                    <option value="-1">{t('search.allArtists')}</option>
                     {artists.map((artist, index)=><option key={index} value={artist}>{artist}</option>)}
                 </select>
             </div>
             <div className="col-12 col-md-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
-                <label htmlFor="song-name" style={{whiteSpace: "nowrap"}}>Song Name: </label>
+                <label htmlFor="song-name" style={{whiteSpace: "nowrap"}}>{t('search.songLabel')}</label>
                 <select 
                     className="form-select rounded-pill" 
                     name="song-name" 
@@ -208,13 +256,13 @@ const Search = () => {
                     value={filter.title || "-1"}
                     onChange={e => handlefieldFilter(e, 'title')}
                 >
-                    <option value="-1">All Songs</option>
+                    <option value="-1">{t('search.allSongs')}</option>
                     {titles.map((title, index)=><option key={index} value={title}>{title}</option>)}
                 </select>
             </div>
             <div className="col-12 col-md-3 px-3 d-flex align-items-center justify-content-md-end" style={{gap: "2em"}}>
-                <button type="button" className="btn btn-light px-4" onClick={handleReset}>Reset</button>
-                <button type="button" className="btn btn-dark px-4" onClick={handleSearch}>Search</button>
+                <button type="button" className="btn btn-light px-4" onClick={handleReset}>{t('common.reset')}</button>
+                <button type="button" className="btn btn-dark px-4" onClick={handleSearch}>{t('common.search')}</button>
             </div>
         </div>
         <div className="row row-cols-1 row-cols-lg-3 g-3">
@@ -223,7 +271,10 @@ const Search = () => {
                     <div className="card song-card pointer" onClick={()=>navigate(`/detail?id=${song.id}`)}>
                         <img src={song.cover?.url} className="card-img-top" alt="card" style={{height: "12em"}}/>
                         <div className="card-body">
-                            <h4 className="card-title">{song.title}</h4>
+                            <h4 className="card-title">
+                                {language === "en" ? song.title :
+                                (language === "zh-CN" ? song.title_zhcn : song.title_zhhk)}
+                            </h4>
                             <h6 className="card-subtitle text-muted mb-3">{song.artist}</h6>
                             {song.tags && song.tags.length > 0 && (
                                 <div className="mb-2">
@@ -233,19 +284,22 @@ const Search = () => {
                                 </div>
                             )}
                             <div className="card-text align-items-center view-tag">
-                                <span>View More </span>
+                                <span>{t('common.viewMore')} </span>
                                 <i className="bi bi-chevron-right"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
+            {!loading && info.length === 0 && 
+                <div className="mb-2" style={{fontSize: "1.5rem"}}>{t('search.noResults')}</div>
+            }
         </div>
         {!loading && totalPages > 1 && (
             <nav aria-label="Page navigation" className="mt-4">
                 <ul className="pagination justify-content-center">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
+                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>{t('common.previous')}</button>
                     </li>
                     {[...Array(totalPages)].map((_, idx) => (
                         <li key={idx} className={`page-item ${currentPage === idx + 1 ? 'active' : ''}`}>
@@ -253,7 +307,7 @@ const Search = () => {
                         </li>
                     ))}
                     <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>{t('common.next')}</button>
                     </li>
                 </ul>
             </nav>

@@ -75,7 +75,7 @@ const Home = () => {
                     {t("home.aboutText2")}
                 </p>
                 <p className="mb-3">
-                    {t("home.bilbili")}
+                    {t("home.bilibili")}
                     <br/>
                     {t("home.email")}
                 </p>

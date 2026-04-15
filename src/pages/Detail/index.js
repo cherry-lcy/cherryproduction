@@ -103,14 +103,14 @@ const Detail = () => {
                     backgroundColor: '#f5f5f5'
                 }}
             >
-                {info.pdf?.url ? (
+                {info.pdf_url ? (
                     <div style={{ 
                         display: 'flex', 
                         justifyContent: 'center',
                         minHeight: 'min-content'
                     }}>
                         <img 
-                            src={info.pdf?.url} 
+                            src={info.pdf_url} 
                             alt={`${info.title} score`}
                             style={{
                                 width: '100%',

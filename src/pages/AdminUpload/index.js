@@ -17,9 +17,15 @@ const AdminUpload = () => {
     const [audioFile, setAudioFile] = useState(null);
     const [pdfFile, setPdfFile] = useState(null);
     const [coverFile, setCoverFile] = useState(null);
+    const [audioUrl, setAudioUrl] = useState("");
+    const [pdfUrl, setPdfUrl] = useState("");
+    const [coverUrl, setCoverUrl] = useState("");
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [uploadingAudio, setUploadingAudio] = useState(false);
+    const [uploadingPdf, setUploadingPdf] = useState(false);
+    const [uploadingCover, setUploadingCover] = useState(false);
     const [delLoading, setDelLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -30,6 +36,84 @@ const AdminUpload = () => {
             navigate("/admin/login");
         }
     }, [navigate]);
+
+    const uploadFileToCloudinary = async (file, endpoint, fileType) => {
+        const formData = new FormData();
+        formData.append(fileType, file);
+        formData.append("title", title);
+        formData.append("artist", artist);
+        const response = await api.upload(endpoint, formData);
+        return response;
+    };
+
+    const handleAudioUpload = async () => {
+        if (!audioFile) return null;
+        
+        setUploadingAudio(true);
+        try {
+            const response = await uploadFileToCloudinary(audioFile, "/api/upload-audio", "audio");
+            if (response && response.audio_url) {
+                setAudioUrl(response.audio_url);
+                setMessage("Audio uploaded successfully");
+                return response.audio_url;
+            } else {
+                setError(response?.error || "Failed to upload audio");
+                return null;
+            }
+        } catch (error) {
+            console.error('Audio upload error:', error);
+            setError(error.message || "Failed to upload audio");
+            return null;
+        } finally {
+            setUploadingAudio(false);
+        }
+    };
+
+    const handlePdfUpload = async () => {
+        if (!pdfFile) return null;
+        
+        setUploadingPdf(true);
+        try {
+            const response = await uploadFileToCloudinary(pdfFile, "/api/upload-pdf", "pdf");
+            if (response && response.pdf_url) {
+                setPdfUrl(response.pdf_url);
+                setMessage("PDF uploaded successfully");
+                return response.pdf_url;
+            } else {
+                setError(response?.error || "Failed to upload PDF");
+                return null;
+            }
+        } catch (error) {
+            console.error('PDF upload error:', error);
+            setError(error.message || "Failed to upload PDF");
+            return null;
+        } finally {
+            setUploadingPdf(false);
+        }
+    };
+
+    const handleCoverUpload = async () => {
+        if (!coverFile) return null;
+        
+        setUploadingCover(true);
+        try {
+            const response = await uploadFileToCloudinary(coverFile, "/api/upload-image", "image");
+            if (response && response.image_url) {
+                setCoverUrl(response.image_url);
+                setMessage("Cover uploaded successfully");
+                return response.image_url;
+            } else {
+                setError(response?.error || "Failed to upload cover");
+                return null;
+            }
+        } catch (error) {
+            console.error('Cover upload error:', error);
+            setError(error.message || "Failed to upload cover");
+            return null;
+        } finally {
+            setUploadingCover(false);
+        }
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -42,39 +126,64 @@ const AdminUpload = () => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("title_zhcn", zhcnTitle !== "" ? zhcnTitle : title);
-        formData.append("title_zhhk", zhhkTitle !== "" ? zhhkTitle : title);
-        formData.append("artist", artist);
-        formData.append("type", type);
-        formData.append("release_date", releaseDate);
-        formData.append("video_url", videoUrl);
+        if (!title || !artist) {
+            setError("Title and Artist are required");
+            return;
+        }
 
-        if (audioFile) {
-            formData.append("audio", audioFile);
-        }
-        if (pdfFile) {
-            formData.append("pdf", pdfFile);
-        }
-        if (coverFile) {
-            formData.append("cover", coverFile);
+        if (!audioFile && !audioUrl) {
+            setError("Please select an audio file");
+            return;
         }
 
         setLoading(true);
 
         try {
+            let finalAudioUrl = audioUrl;
+            let finalPdfUrl = pdfUrl;
+            let finalCoverUrl = coverUrl;
+
+            if (audioFile && !audioUrl) {
+                finalAudioUrl = await handleAudioUpload();
+                if (!finalAudioUrl) {
+                    setError("Failed to upload audio");
+                    setLoading(false);
+                    return;
+                }
+            }
+
+            if (pdfFile && !pdfUrl) {
+                finalPdfUrl = await handlePdfUpload();
+            }
+
+            if (coverFile && !coverUrl) {
+                finalCoverUrl = await handleCoverUpload();
+            }
+
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("title_zhcn", zhcnTitle !== "" ? zhcnTitle : title);
+            formData.append("title_zhhk", zhhkTitle !== "" ? zhhkTitle : title);
+            formData.append("artist", artist);
+            formData.append("type", type);
+            formData.append("release_date", releaseDate);
+            formData.append("video_url", videoUrl);
+            formData.append("audio_url", finalAudioUrl);
+            formData.append("pdf_url", finalPdfUrl || "");
+            formData.append("cover_url", finalCoverUrl || "");
+
             const response = await api.upload("/api/songs", formData);
-            const response2 = await api.post(`/api/tags/${title}`, {
-                "tag": tag1
-            });
-            const response3 = await api.post(`/api/tags/${title}`, {
-                "tag": tag2
-            });
             
-            if ((response && response.error) || (response2 && response2.error) || (response3 && response3.error)) {
+            if (tag1) {
+                await api.post(`/api/tags/${title}`, { tag: tag1 });
+            }
+            if (tag2) {
+                await api.post(`/api/tags/${title}`, { tag: tag2 });
+            }
+            
+            if (response && response.error) {
                 setError(response.error);
-            } else if (response && response.song && response2 && response2.tag && response3 && response3.tag) {
+            } else if (response && response.song) {
                 setMessage("Song uploaded successfully.");
                 setTitle("");
                 setZhcnTitle("");
@@ -86,6 +195,9 @@ const AdminUpload = () => {
                 setAudioFile(null);
                 setPdfFile(null);
                 setCoverFile(null);
+                setAudioUrl("");
+                setPdfUrl("");
+                setCoverUrl("");
                 setTag1("");
                 setTag2("");
                 
@@ -128,7 +240,7 @@ const AdminUpload = () => {
             
             if ((response && response.error)) {
                 setError(response.error);
-            } else if (response && response.song) {
+            } else {
                 setMessage("Song deleted successfully.");
                 setTitle("");
                 setZhcnTitle("");
@@ -140,14 +252,15 @@ const AdminUpload = () => {
                 setAudioFile(null);
                 setPdfFile(null);
                 setCoverFile(null);
+                setAudioUrl("");
+                setPdfUrl("");
+                setCoverUrl("");
                 setTag1("");
                 setTag2("");
                 
                 document.getElementById('audio-file').value = '';
                 document.getElementById('piece-file').value = '';
                 document.getElementById('cover-file').value = '';
-            } else {
-                setMessage("Song deleted successfully.");
             }
         } catch (error) {
             console.error('Upload error:', error);
@@ -157,9 +270,12 @@ const AdminUpload = () => {
         }
     };
 
-    const handleFileChange = (setter) => (e) => {
+    const handleFileChange = (setter, urlSetter) => (e) => {
         const file = e.target.files?.[0] ?? null;
         setter(file);
+        if (urlSetter) {
+            urlSetter("");
+        }
     };
 
     return (
@@ -258,7 +374,6 @@ const AdminUpload = () => {
                             className="form-control"
                             value={tag1}
                             onChange={(e) => setTag1(e.target.value)}
-                            required
                         />
                     </div>
 
@@ -272,7 +387,6 @@ const AdminUpload = () => {
                             className="form-control"
                             value={tag2}
                             onChange={(e) => setTag2(e.target.value)}
-                            required
                         />
                     </div>
 
@@ -290,19 +404,25 @@ const AdminUpload = () => {
                     
                     <div className="mb-3">
                         <label htmlFor="audio-file" className="form-label">
-                            Audio File
+                            Audio File <span className="text-danger">*</span>
                         </label>
                         <input
                             id="audio-file"
                             type="file"
                             className="form-control"
                             accept="audio/*"
-                            onChange={handleFileChange(setAudioFile)}
+                            onChange={handleFileChange(setAudioFile, setAudioUrl)}
                             required
                         />
                         {audioFile && (
                             <div className="form-text">
                                 Selected: {audioFile.name} ({(audioFile.size / 1024 / 1024).toFixed(2)} MB)
+                                {uploadingAudio && " - Uploading..."}
+                            </div>
+                        )}
+                        {audioUrl && (
+                            <div className="form-text text-success">
+                                ✓ Audio uploaded successfully
                             </div>
                         )}
                     </div>
@@ -313,12 +433,18 @@ const AdminUpload = () => {
                             id="piece-file"
                             type="file"
                             className="form-control"
-                            accept="image/*"
-                            onChange={handleFileChange(setPdfFile)}
+                            accept="application/pdf,image/*"
+                            onChange={handleFileChange(setPdfFile, setPdfUrl)}
                         />
                         {pdfFile && (
                             <div className="form-text">
                                 Selected: {pdfFile.name} ({(pdfFile.size / 1024 / 1024).toFixed(2)} MB)
+                                {uploadingPdf && " - Uploading..."}
+                            </div>
+                        )}
+                        {pdfUrl && (
+                            <div className="form-text text-success">
+                                ✓ PDF uploaded successfully
                             </div>
                         )}
                     </div>
@@ -330,11 +456,17 @@ const AdminUpload = () => {
                             type="file"
                             className="form-control"
                             accept="image/*"
-                            onChange={handleFileChange(setCoverFile)}
+                            onChange={handleFileChange(setCoverFile, setCoverUrl)}
                         />
                         {coverFile && (
                             <div className="form-text">
                                 Selected: {coverFile.name} ({(coverFile.size / 1024 / 1024).toFixed(2)} MB)
+                                {uploadingCover && " - Uploading..."}
+                            </div>
+                        )}
+                        {coverUrl && (
+                            <div className="form-text text-success">
+                                ✓ Cover uploaded successfully
                             </div>
                         )}
                     </div>
@@ -355,12 +487,12 @@ const AdminUpload = () => {
                         type="button" 
                         className="btn btn-dark"
                         onClick={handleSubmit} 
-                        disabled={loading}
+                        disabled={loading || uploadingAudio || uploadingPdf || uploadingCover}
                     >
                         {loading ? (
                             <>
                                 <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                Uploading...
+                                Saving...
                             </>
                         ) : "Save"}
                     </button>

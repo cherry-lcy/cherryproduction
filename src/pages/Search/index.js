@@ -269,7 +269,7 @@ const Search = () => {
             {!loading && info.map((song, index) => 
                 <div className="col my-3" key={index}>
                     <div className="card song-card pointer" onClick={()=>navigate(`/detail?id=${song.id}`)}>
-                        <img src={song.cover?.url} className="card-img-top" alt="card" style={{height: "12em"}}/>
+                        <img src={song.cover_url} className="card-img-top" alt="card" style={{height: "12em"}}/>
                         <div className="card-body">
                             <h4 className="card-title">
                                 {language === "en" ? song.title :

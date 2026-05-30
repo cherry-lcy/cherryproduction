@@ -52,7 +52,7 @@ const Detail = () => {
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><Link to="/">{t("common.home")}</Link></li>
-                    <li className="breadcrumb-item"><Link to="/search">
+                    <li className="breadcrumb-item"><Link to={`/search?type=${info.type}&sort_by=release_date&order=desc`}>
                         {info.type ? 
                             (info.type === "Transcriptions" ? t("detail.transcriptions") : t("detail.arrangements")) 
                         : ""}
@@ -79,7 +79,7 @@ const Detail = () => {
                     <span className="badge bg-primary text-light" key={id}>{tag.tag}</span>
                 })}
             </div>
-            <p className="desc mb-4">{t("detail.lastUpdated")}: {info.release_date ? info.release_date : "/"}</p>
+            <p className="desc mb-4">{t("detail.lastUpdated")}: {info.release_date ? info.release_date.split('T')[0] : "/"}</p>
             <audio className="mb-3" src={info.audio_url ? info.audio_url : ""} controls></audio>
             <h5 className="mb-2">{t("detail.video")}</h5>
             <div className="mb-4 detail-media detail-video" style={{ height: '700px', border: '1px solid #ddd', borderRadius: '8px' }}>

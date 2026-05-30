@@ -26,7 +26,7 @@ const SearchBar = ({ mode = "light", onSearch, onChange, placeholder = "Search",
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
-            onChange(e.target.value);
+            // onChange(e.target.value);
           }}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}

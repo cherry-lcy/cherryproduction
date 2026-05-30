@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
@@ -13,7 +13,7 @@ import "./index.css";
 const Search = () => {
     const navigate = useNavigate();
     const { t, language } = useLanguage();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState([]);
     const [artists, setArtists] = useState([]);
@@ -29,15 +29,57 @@ const Search = () => {
     const [types, setTypes] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    
+    // Add cache to avoid repeated searches
+    const searchCache = useRef(new Map());
+    // Add debounce timer reference
+    const debounceTimer = useRef(null);
+    // Track if initial load is done
+    const isInitialMount = useRef(true);
 
     const ITEMS_PER_PAGE = 9;
+
+    // Helper function to sync filter state with URL parameters
+    const syncURLWithFilter = (newFilter, page = currentPage) => {
+        const params = new URLSearchParams();
+        if (newFilter.query) params.set('q', newFilter.query);
+        if (newFilter.artist) params.set('artist', newFilter.artist);
+        if (newFilter.title) params.set('title', newFilter.title);
+        if (newFilter.type) params.set('type', newFilter.type);
+        if (newFilter.sort_by) params.set('sort_by', newFilter.sort_by);
+        if (newFilter.order) params.set('order', newFilter.order);
+        if (page > 1) params.set('page', page);
+        setSearchParams(params, { replace: true });
+    };
 
     async function getTitles(artistName = null){
         const response = await Api.get(`/api/titles${artistName ? `/${encodeURIComponent(artistName)}` : ''}`);
         setTitles(response.titles);
     }
 
-    async function searchSongs() {
+    // Memoize search function to prevent recreation
+    const searchSongs = useCallback(async (skipCache = false) => {
+        // Clear any pending debounce timer
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+
+        // Generate cache key based on current state
+        const cacheKey = JSON.stringify({
+            filter,
+            currentPage,
+            language
+        });
+        
+        // Check cache first (skipCache for manual search)
+        if (!skipCache && searchCache.current.has(cacheKey)) {
+            const cached = searchCache.current.get(cacheKey);
+            setInfo(cached.songs);
+            setTotalPages(cached.totalPages);
+            setLoading(false);
+            return;
+        }
+        
         setLoading(true);
         try {
             const params = new URLSearchParams();
@@ -54,20 +96,32 @@ const Search = () => {
             const response = await Api.get(`/api/songs/search?${params.toString()}`);
             setInfo(response.data.songs);
             setTotalPages(response.data.total_pages);
+            
+            // Cache the results (expire after 5 minutes)
+            searchCache.current.set(cacheKey, {
+                songs: response.data.songs,
+                totalPages: response.data.total_pages,
+                timestamp: Date.now()
+            });
+            
+            // Clean up old cache entries after 5 minutes
+            setTimeout(() => {
+                if (searchCache.current.get(cacheKey)?.timestamp === Date.now()) {
+                    searchCache.current.delete(cacheKey);
+                }
+            }, 5 * 60 * 1000);
+            
+            // Sync URL with current filter and page after search
+            syncURLWithFilter(filter, currentPage);
         } catch (error) {
             console.error("Search failed:", error);
         } finally {
             setLoading(false);
         }
-    }
+    }, [filter, currentPage, language]);
 
+    // Initial load - fetch artists, types, and titles
     useEffect(() => {
-        if (!loading) {
-            searchSongs();
-        }
-    }, [language]);
-
-    useEffect(()=>{
         async function getArtists(){
             const response = await Api.get("/api/artists");
             setArtists(response.artists);
@@ -81,37 +135,68 @@ const Search = () => {
         Promise.all([getArtists(), getTypes(), getTitles()]).then(() => {
             searchSongs();
         });
-    }, []);
+    }, []); // Empty dependency array - runs once
+
+    // Debounced search for filter changes (prevents excessive API calls)
+    useEffect(() => {
+        // Skip on initial mount to avoid duplicate search
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+        
+        // Clear previous timer
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+        
+        // Set new timer - 500ms delay before searching
+        debounceTimer.current = setTimeout(() => {
+            searchSongs();
+        }, 500);
+        
+        // Cleanup timer on component unmount or when dependencies change
+        return () => {
+            if (debounceTimer.current) {
+                clearTimeout(debounceTimer.current);
+            }
+        };
+    }, [filter, currentPage, language, searchSongs]);
 
     const handleFilter = (e) => {
+        let newFilter;
         if(e.target.value === "1" || e.target.value === "2"){
-            setFilter({
+            newFilter = {
                 ...filter,
                 sort_by: "release_date",
                 order: e.target.value === "1" ? "desc" : "asc"
-            });
+            };
         }
         else if(e.target.value === "3" || e.target.value === "4"){
-            setFilter({
+            newFilter = {
                 ...filter,
                 sort_by: "title",
                 order: e.target.value === "3" ? "asc" : "desc"
-            });
+            };
         }
         else{
-            setFilter({
+            newFilter = {
                 ...filter,
                 sort_by: "artist",
                 order: e.target.value === "5" ? "asc" : "desc"
-            });
+            };
         }
+        setFilter(newFilter);
         setCurrentPage(1);
+        syncURLWithFilter(newFilter, 1);
     }
 
     const handlefieldFilter = (e, field) => {
         const value = e.target.value;
-        setFilter({...filter, [field]: value === "-1" ? "" : value});
+        const newFilter = {...filter, [field]: value === "-1" ? "" : value};
+        setFilter(newFilter);
         setCurrentPage(1);
+        syncURLWithFilter(newFilter, 1);
         
         if (field === 'artist') {
             if (value === "-1") {
@@ -123,40 +208,68 @@ const Search = () => {
     }
 
     const handleReset = () => {
-        setFilter({
+        const newFilter = {
             sort_by: "release_date",
             artist: "",
             title: "",
             type: "",
             order: "desc",
             query: ""
-        });
+        };
+        setFilter(newFilter);
         setCurrentPage(1);
         getTitles();
+        setSearchParams({}, { replace: true });
+        // Clear cache on reset
+        searchCache.current.clear();
+        // Trigger search immediately
         setTimeout(() => searchSongs(), 0);
     }
 
     const handleSearch = () => {
+        // Clear debounce timer to trigger search immediately
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
         setCurrentPage(1);
-        searchSongs();
+        // Skip cache for manual search
+        searchSongs(true);
     }
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
+        syncURLWithFilter(filter, page);
         window.scrollTo(0, 0);
     }
 
+    // Sync filter when URL parameters change (for browser back/forward)
     useEffect(() => {
-        if (currentPage === 1) {
-            searchSongs();
+        const query = searchParams.get("q") || "";
+        const artist = searchParams.get("artist") || "";
+        const title = searchParams.get("title") || "";
+        const type = searchParams.get("type") || "";
+        const sort_by = searchParams.get("sort_by") || "release_date";
+        const order = searchParams.get("order") || "desc";
+        const page = parseInt(searchParams.get("page")) || 1;
+        
+        const newFilter = {
+            sort_by,
+            artist,
+            title,
+            type,
+            order,
+            query
+        };
+        
+        // Only update if URL params are different from current filter
+        if (JSON.stringify(filter) !== JSON.stringify(newFilter)) {
+            setFilter(newFilter);
         }
-    }, [filter.sort_by, filter.order, filter.artist, filter.title, filter.type, filter.query]);
-
-    useEffect(() => {
-        if (currentPage !== 1) {
-            searchSongs();
+        
+        if (page !== currentPage) {
+            setCurrentPage(page);
         }
-    }, [currentPage]);
+    }, [searchParams]); // Listen to URL changes
 
     return (<>
     <section className="header-section w-100">
@@ -173,26 +286,37 @@ const Search = () => {
                     mode="light" 
                     width="100%"
                     onSearch={(query) => {
-                        setFilter({
+                        // Clear any pending debounce
+                        if (debounceTimer.current) {
+                            clearTimeout(debounceTimer.current);
+                        }
+                        const newFilter = {
                             ...filter,
                             artist: '',
                             title: '',
                             type: '',
                             tag: '',
                             query: query
-                        });
+                        };
+                        setFilter(newFilter);
                         setCurrentPage(1);
+                        syncURLWithFilter(newFilter, 1);
+                        // Trigger search immediately without debounce
+                        setTimeout(() => searchSongs(true), 0);
                     }}
                     onChange={(query) => {
-                        setFilter({
+                        // This will trigger debounced search via the useEffect
+                        const newFilter = {
                             ...filter,
                             artist: '',
                             title: '',
                             type: '',
                             tag: '',
                             query: query
-                        });
+                        };
+                        setFilter(newFilter);
                         setCurrentPage(1);
+                        syncURLWithFilter(newFilter, 1);
                     }}
                     placeholder={t("common.search")}
                 />
@@ -276,6 +400,12 @@ const Search = () => {
                                 (language === "zh-CN" ? song.title_zhcn : song.title_zhhk)}
                             </h4>
                             <h6 className="card-subtitle text-muted mb-3">{song.artist}</h6>
+                            {/* Display release date - YYYY-MM-DD only */}
+                            {song.release_date && (
+                                <div className="card-text text-muted small mb-2">
+                                    {song.release_date.split('T')[0]}
+                                </div>
+                            )}
                             {song.tags && song.tags.length > 0 && (
                                 <div className="mb-2">
                                     {song.tags.slice(0, 3).map((tag, idx) => (

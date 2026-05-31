@@ -21,6 +21,7 @@ const NotFound = () => {
             {t('notFound.return')[0].toUpperCase()+t('notFound.return').slice(1)}
             <span
             className='pointer nav link'
+            style={{fontWeight: "bold"}}
             onClick={()=>{
                 navigate('/');
             }}
@@ -29,6 +30,7 @@ const NotFound = () => {
             {t('notFound.goBack')}
             <span
             className='pointer nav link'
+            style={{fontWeight: "bold"}}
             onClick={()=>{
                 navigate(-1);
             }}

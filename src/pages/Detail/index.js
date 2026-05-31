@@ -5,6 +5,7 @@ import Footer from "../../components/Footer";
 import SideBar from "../../components/SideBar";
 import Loading from "../../components/Loading";
 import Api from "../../utils/api";
+import NotFound from "../NotFound";
 import { useLanguage } from "../../contexts/LanguageContext";
 import "./index.css";
 
@@ -45,6 +46,10 @@ const Detail = () => {
         console.log(tags, info);
     }, [tags, info])
 
+    if (!info || !info.id || !tags) {
+        return <NotFound />;
+    }
+
     return (<>
         <SideBar link={info.video_url ? info.video_url : ''} songId={id}/>
         <NavBar mode="light"/>
@@ -54,7 +59,7 @@ const Detail = () => {
                     <li className="breadcrumb-item"><Link to="/">{t("common.home")}</Link></li>
                     <li className="breadcrumb-item"><Link to={`/search?type=${info.type}&sort_by=release_date&order=desc`}>
                         {info.type ? 
-                            (info.type === "Transcriptions" ? t("detail.transcriptions") : t("detail.arrangements")) 
+                            (info.type === "Transcription" ? t("detail.transcriptions") : t("detail.arrangements")) 
                         : ""}
                     </Link></li>
                     <li className="breadcrumb-item active">

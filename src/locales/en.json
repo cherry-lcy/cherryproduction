@@ -129,5 +129,14 @@
       "title": "Contact Us",
       "content": "If you have any questions about this Privacy Statement, please contact Cherry Production at: cherryproduction0101@gmail.com"
     }
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "content": "Sorry, the page you are looking for does not exist.",
+    "return": "return to ",
+    "home": "Home Page",
+    "or": " or ",
+    "goBack": "return to ",
+    "previous": "the Previous Page."
   }
 }

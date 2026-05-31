@@ -393,14 +393,13 @@ const Search = () => {
             {!loading && info.map((song, index) => 
                 <div className="col my-3" key={index}>
                     <div className="card song-card pointer" onClick={()=>navigate(`/detail?id=${song.id}`)}>
-                        <img src={song.cover_url} className="card-img-top" alt="card" style={{height: "12em"}}/>
+                        <img src={song.cover_url} className="card-img-top" alt="card" style={{height: "15em"}}/>
                         <div className="card-body">
                             <h4 className="card-title">
                                 {language === "en" ? song.title :
                                 (language === "zh-CN" ? song.title_zhcn : song.title_zhhk)}
                             </h4>
                             <h6 className="card-subtitle text-muted mb-3">{song.artist}</h6>
-                            {/* Display release date - YYYY-MM-DD only */}
                             {song.release_date && (
                                 <div className="card-text text-muted small mb-2">
                                     {song.release_date.split('T')[0]}

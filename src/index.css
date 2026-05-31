@@ -205,3 +205,7 @@ button{
     min-width: 100%;
   }
 }
+
+.link:visited{
+  color: grey;
+}

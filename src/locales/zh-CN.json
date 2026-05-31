@@ -129,5 +129,14 @@
       "title": "联系Cherry Production",
       "content": "如果您对本隐私声明有任何疑问，请通过以下邮箱联系Cherry Production：cherryproduction0101@gmail.com"
     }
+  },
+  "notFound": {
+    "title": "页面未找到",
+    "content": "抱歉，您访问的页面不存在。",
+    "return": "返回",
+    "home": "首页",
+    "or": "或",
+    "goBack": "返回",
+    "previous": "上一页"
   }
 }

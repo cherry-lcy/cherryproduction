@@ -5,6 +5,7 @@ import Detail from '../pages/Detail';
 import AdminLogin from "../pages/AdminLogin";
 import AdminUpload from "../pages/AdminUpload";
 import Privacy from '../pages/Privacy';
+import NotFound from '../pages/NotFound';
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
     {
         path: "/admin/upload",
         element: <AdminUpload/>
+    },
+    {
+        path: "*",
+        element: <NotFound/>
     }
 ])
 

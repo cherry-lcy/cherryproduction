@@ -129,5 +129,14 @@
       "title": "聯繫",
       "content": "如果您對本私隱聲明有任何疑問，請通過以下郵箱聯繫Cherry Production：cherryproduction0101@gmail.com"
     }
+  },
+  "notFound": {
+    "title": "頁面未找到",
+    "content": "抱歉，您訪問的頁面不存在。",
+    "return": "返回",
+    "home": "首頁",
+    "or": "或",
+    "goBack": "返回",
+    "previous": "前頁"
   }
 }

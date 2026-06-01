@@ -46,7 +46,7 @@ const Detail = () => {
         console.log(tags, info);
     }, [tags, info])
 
-    if (!info || !info.id || !tags) {
+    if (!loading && (!info || !info.id || !tags)) {
         return <NotFound />;
     }
 

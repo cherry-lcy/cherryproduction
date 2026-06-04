@@ -80,13 +80,13 @@ const Detail = () => {
             <div className="d-flex justify-content-start align-items-center mb-3" style={{gap: "1.5rem", fontSize: "18px"}}>
                 {!loading && tags.map((tag, id)=>{
                     return id % 2 === 0 ? 
-                    <span className="badge bg-info text-dark" key={id}>{tag.tag}</span>:
-                    <span className="badge bg-primary text-light" key={id}>{tag.tag}</span>
+                    <span className="badge bg-info text-dark" key={id}>{t(`song.type.${tag.tag}`, tag.tag)}</span>:
+                    <span className="badge bg-primary text-light" key={id}>{t(`song.type.${tag.tag}`, tag.tag)}</span>
                 })}
             </div>
             <p className="desc mb-4">{t("detail.lastUpdated")}: {info.release_date ? info.release_date.split('T')[0] : "/"}</p>
             <audio className="mb-3" src={info.audio_url ? info.audio_url : ""} controls></audio>
-            <h5 className="mb-2">{t("detail.video")}</h5>
+            <h4 className="mb-2">{t("detail.video")}</h4>
             <div className="mb-4 detail-media detail-video" style={{ height: '700px', border: '1px solid #ddd', borderRadius: '8px' }}>
                 <iframe
                     src={info.video_url ? info.video_url : ""}
@@ -96,7 +96,7 @@ const Detail = () => {
                     title="Video Viewer"
                 />
             </div>
-            <h5 className="mb-3">{t("detail.score")}</h5>
+            <h4 className="mb-3">{t("detail.score")}</h4>
             <div 
                 className="mb-3 detail-media detail-pdf" 
                 style={{ 

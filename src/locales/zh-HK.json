@@ -138,5 +138,25 @@
     "or": "或",
     "goBack": "返回",
     "previous": "前頁"
+  },
+  "song": {
+    "type": { 
+      "Transcription": "扒譜",
+      "Arrangement": "改編",
+      "Girl Group": "女團",
+      "Boy Group": "男團",
+      "Mixed Group": "混團",
+      "Girl Solo": "女歌手"
+    },
+    "artist": {
+      "WJSN": "宇宙少女",
+      "aespa - NingNing": "aespa - 寧藝卓",
+      "TAEYEON": "金泰妍",
+      "i-dle - YUQI": "i-dle - 宋雨琦",
+      "aespa - Karina": "aespa - 柳智敏",
+      "aespa - Winter": "aespa - 金玟庭",
+      "YENA": "崔叡娜",
+      "WENDY": "孫勝完"
+    }
   }
 }

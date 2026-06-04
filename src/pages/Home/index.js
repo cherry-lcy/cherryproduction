@@ -114,7 +114,7 @@ const Home = () => {
                                 <div className="card-body pt-4 pb-4" onClick={() => navigate(`/detail?id=${song.id}`)}> 
                                     <h4 className="card-title">{song.title}</h4>
                                     <h6 className="card-subtitle mb-4 text-muted">{song.artist}</h6>
-                                    <div>
+                                    <div style={{display: "flex"}}>
                                         {tags[song.id] && 
                                             tags[song.id].map((tag, tagIndex) => (
                                                 <span key={tagIndex} className="tag">{tag.tag}</span>  
@@ -127,7 +127,7 @@ const Home = () => {
                     )}
                     <div style={{width: "0 !important"}}>
                         <i 
-                            className="bi bi-chevron-right" 
+                            className="bi bi-chevron-right next-btn" 
                             style={{
                                 width: "auto !important",
                                 position: "absolute",

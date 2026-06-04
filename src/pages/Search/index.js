@@ -39,6 +39,41 @@ const Search = () => {
 
     const ITEMS_PER_PAGE = 9;
 
+    // Helper function to generate pagination range with ellipsis
+    // Shows: first page, last page, pages around current page, and ellipsis where needed
+    const getPaginationRange = (current, total, maxVisible = 5) => {
+        if (total <= 1) return [1];
+        
+        const range = [];
+        const halfVisible = Math.floor(maxVisible / 2);
+        let start = Math.max(1, current - halfVisible);
+        let end = Math.min(total, start + maxVisible - 1);
+        
+        // Adjust if we're near the end
+        if (end - start + 1 < maxVisible) {
+            start = Math.max(1, end - maxVisible + 1);
+        }
+        
+        // Always show first page
+        if (start > 1) {
+            range.push(1);
+            if (start > 2) range.push('...');
+        }
+        
+        // Add pages in the middle range
+        for (let i = start; i <= end; i++) {
+            range.push(i);
+        }
+        
+        // Always show last page
+        if (end < total) {
+            if (end < total - 1) range.push('...');
+            range.push(total);
+        }
+        
+        return range;
+    };
+
     // Helper function to sync filter state with URL parameters
     const syncURLWithFilter = (newFilter, page = currentPage) => {
         const params = new URLSearchParams();
@@ -127,12 +162,7 @@ const Search = () => {
             setArtists(response.artists);
         }
 
-        async function getTypes(){
-            const response = await Api.get("/api/types");
-            setTypes(response.types);
-        }
-
-        Promise.all([getArtists(), getTypes(), getTitles()]).then(() => {
+        Promise.all([getArtists(), getTitles()]).then(() => {
             searchSongs();
         });
     }, []); // Empty dependency array - runs once
@@ -237,6 +267,7 @@ const Search = () => {
     }
 
     const handlePageChange = (page) => {
+        if (page === '...') return; // Do nothing for ellipsis
         setCurrentPage(page);
         syncURLWithFilter(filter, page);
         window.scrollTo(0, 0);
@@ -270,6 +301,9 @@ const Search = () => {
             setCurrentPage(page);
         }
     }, [searchParams]); // Listen to URL changes
+
+    // Generate pagination items with ellipsis
+    const paginationRange = getPaginationRange(currentPage, totalPages, 5);
 
     return (<>
     <section className="header-section w-100">
@@ -355,7 +389,8 @@ const Search = () => {
                     onChange={e=>handlefieldFilter(e, 'type')}
                 >
                     <option value="-1">{t('search.allTypes')}</option>
-                    {types.map((type, index)=><option key={index} value={type}>{type}</option>)}
+                    <option value="Transcription">{t(`song.type.Transcription`, "Transcription")}</option>
+                    <option value="Arrangement">{t(`song.type.Arrangement`, "Arrangement")}</option>
                 </select>
             </div>
             <div className="col-12 col-md-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
@@ -368,7 +403,7 @@ const Search = () => {
                     onChange={e => handlefieldFilter(e, 'artist')}
                 >
                     <option value="-1">{t('search.allArtists')}</option>
-                    {artists.map((artist, index)=><option key={index} value={artist}>{artist}</option>)}
+                    {artists.map((artist, index)=><option key={index} value={artist}>{t(`song.artist.${artist}`, artist)}</option>)}
                 </select>
             </div>
             <div className="col-12 col-md-3 px-3 d-flex align-items-center" style={{gap: "10px"}}>
@@ -399,7 +434,7 @@ const Search = () => {
                                 {language === "en" ? song.title :
                                 (language === "zh-CN" ? song.title_zhcn : song.title_zhhk)}
                             </h4>
-                            <h6 className="card-subtitle text-muted mb-3">{song.artist}</h6>
+                            <h6 className="card-subtitle text-muted mb-3">{t(`song.artist.${song.artist}`, song.artist)}</h6>
                             {song.release_date && (
                                 <div className="card-text text-muted small mb-2">
                                     {song.release_date.split('T')[0]}
@@ -408,7 +443,7 @@ const Search = () => {
                             {song.tags && song.tags.length > 0 && (
                                 <div className="mb-2">
                                     {song.tags.slice(0, 3).map((tag, idx) => (
-                                        <span key={idx} className={`badge ${tagBgColors[idx % tagBgColors.length]} bg-gradient me-1`}>{tag}</span>
+                                        <span key={idx} className={`badge ${tagBgColors[idx % tagBgColors.length]} bg-gradient me-1`}>{t(`song.type.${tag}`, tag)}</span>
                                     ))}
                                 </div>
                             )}
@@ -428,15 +463,29 @@ const Search = () => {
             <nav aria-label="Page navigation" className="mt-4">
                 <ul className="pagination justify-content-center">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>{t('common.previous')}</button>
+                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
+                            {t('common.previous')}
+                        </button>
                     </li>
-                    {[...Array(totalPages)].map((_, idx) => (
-                        <li key={idx} className={`page-item ${currentPage === idx + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(idx + 1)}>{idx + 1}</button>
-                        </li>
+                    
+                    {paginationRange.map((page, idx) => (
+                        page === '...' ? (
+                            <li key={`ellipsis-${idx}`} className="page-item disabled">
+                                <button className="page-link" disabled>...</button>
+                            </li>
+                        ) : (
+                            <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                                <button className="page-link" onClick={() => handlePageChange(page)}>
+                                    {page}
+                                </button>
+                            </li>
+                        )
                     ))}
+                    
                     <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>{t('common.next')}</button>
+                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                            {t('common.next')}
+                        </button>
                     </li>
                 </ul>
             </nav>

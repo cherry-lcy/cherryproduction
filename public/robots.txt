@@ -1,3 +1,11 @@
-# https://www.robotstxt.org/robotstxt.html
+# robots.txt
+# Allow all crawlers to access everything
 User-agent: *
-Disallow:
+Allow: /
+
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /admin/upload
+
+# Sitemap location
+Sitemap: https://cherryproduction-server.onrender.com/sitemap.xml

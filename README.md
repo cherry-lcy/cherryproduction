@@ -1,10 +1,10 @@
 # Cherry Production - Music Portfolio Frontend
 
-Cherry Production's personal music portfolio website. Here, you can listen to and search my transcription or arrangements of Kpop songs, and download the corresponding scores.
+Cherry Production's personal music portfolio website. Here, you can listen to and search my transcription or arrangements of Kpop songs in piano, and download the corresponding piano scores.
 
 ## Live Demo
 
-**Website:** [https://cherryproduction.pages.dev](https://cherryproduction.pages.dev)
+**Website:** [https://cherryproduction.cc](https://cherryproduction.cc)
 
 ## Features
 

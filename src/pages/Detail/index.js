@@ -97,6 +97,7 @@ const Detail = () => {
                 />
             </div>
             <h4 className="mb-3">{t("detail.score")}</h4>
+            <p>{t("detail.score-save")}</p>
             <div 
                 className="mb-3 detail-media detail-pdf" 
                 style={{ 
